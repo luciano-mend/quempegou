@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">QuemPegou</string>
+    <string name="item_emprestado">Item emprestado</string>
+    <string name="para_quem">Para quem?</string>
+    <string name="limpar">Limpar</string>
+    <string name="salvar">Salvar</string>
+    <string name="qual_item_foi_emprestado">Qual item foi emprestado?</string>
+    <string name="as_entradas_foram_apagadas">As entradas foram apagadas!</string>
+    <string name="campo_item_emprestado_nao_preenchido">Campo item emprestado não preenchido!</string>
+    <string name="prioridade_devolucao">Prioridade de devolução</string>
+    <string name="prioridade_baixa">Baixa</string>
+    <string name="prioridade_alta">Alta</string>
+    <string name="item_fragil">O item é frágil?</string>
+    <string name="observacoes">Observações adicionais</string>
 </resources>
