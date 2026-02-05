@@ -12,4 +12,10 @@
     <string name="prioridade_alta">Alta</string>
     <string name="item_fragil">O item é frágil?</string>
     <string name="observacoes">Observações adicionais</string>
+    <string name="yoda">Yoda</string>
+    <string name="luke">Luke</string>
+    <string name="leia">Leia</string>
+    <string name="anakin">Anakin</string>
+    <string name="nao_existem_amigos_cadastrados">Não existem amigos cadastrados!</string>
+    <string name="selecione_uma_prioridade_de_devolucao">Selecione uma prioridade de devolução!</string>
 </resources>
