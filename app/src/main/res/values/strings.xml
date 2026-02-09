@@ -8,6 +8,7 @@
     <string name="as_entradas_foram_apagadas">As entradas foram apagadas!</string>
     <string name="campo_item_emprestado_nao_preenchido">Campo item emprestado não preenchido!</string>
     <string name="prioridade_devolucao">Prioridade de devolução</string>
+    <string name="prioridade_vazio">Vazio</string>
     <string name="prioridade_baixa">Baixa</string>
     <string name="prioridade_alta">Alta</string>
     <string name="item_fragil">O item é frágil?</string>
@@ -18,4 +19,27 @@
     <string name="anakin">Anakin</string>
     <string name="nao_existem_amigos_cadastrados">Não existem amigos cadastrados!</string>
     <string name="selecione_uma_prioridade_de_devolucao">Selecione uma prioridade de devolução!</string>
+    <string name="item_clean_code">Livro Clean Code (Robert C. Martin)</string>
+    <string name="item_zelda">Jogo Switch: Zelda Tears of the Kingdom</string>
+    <string name="item_arduino">Kit Arduino Uno R3 + Jumpers</string>
+    <string name="item_hub_usbc">Adaptador Hub USB-C (HDMI/USB 3.0)</string>
+    <string name="item_hd_externo">HD Externo 2TB (Backups Antigos)</string>
+    <string name="item_kindle">Leitor Kindle Paperwhite</string>
+    <string name="item_rpg_dnd">Livro RPG: D&amp;D 5ª Edição (Jogador)</string>
+    <string name="item_headset">Headset Bluetooth Sony (Noise Cancelling)</string>
+    <string name="item_gopro">Câmera GoPro Hero + Suporte</string>
+    <string name="item_ferramentas">Kit Chaves de Precisão (Torx/Y)</string>
+    <string name="layout_Item_emprestado">Item emprestado:</string>
+    <string name="layout_nome_amigo">Nome:</string>
+    <string name="layout_prioridade_devolucao">Prioridade de devolução:</string>
+    <string name="layout_item_fragil">Item frágil?</string>
+    <string name="layout_observacao">Observações:</string>
+    <string name="devolucao_item">Item devolvido?</string>
+    <string name="layout_item_devolvido">O item foi devolvido?</string>
+    <string name="item_fragil_sim">Sim, item frágil</string>
+    <string name="item_fragil_nao">Não é frágil</string>
+    <string name="item_devolvido_sim">Sim, item devolvido</string>
+    <string name="item_devolvido_nao">Não foi devolvido</string>
+    <string name="o_item_emprestado">"O item emprestado: "</string>
+    <string name="foi_clicado">"\nfoi clicado!"</string>
 </resources>

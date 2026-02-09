@@ -121,12 +121,15 @@
             app:layout_constraintTop_toBottomOf="@+id/spnAmigos" />
 
         <CheckBox
-            android:id="@+id/ckbFragil"
+            android:id="@+id/chkFragil"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:text="@string/item_fragil"
+            app:layout_constraintEnd_toStartOf="@+id/chkDevolucao"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/rgbPrioridadeDevolucao" />
 
@@ -153,7 +156,19 @@
             android:labelFor="@id/edtObservacoes"
             android:text="@string/observacoes"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/ckbFragil" />
+            app:layout_constraintTop_toBottomOf="@+id/chkFragil" />
+
+        <CheckBox
+            android:id="@+id/chkDevolucao"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:text="@string/devolucao_item"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/chkFragil"
+            tools:layout_editor_absoluteY="265dp" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
 

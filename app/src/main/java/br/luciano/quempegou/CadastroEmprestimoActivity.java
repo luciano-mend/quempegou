@@ -9,7 +9,6 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
@@ -19,19 +18,19 @@ public class CadastroEmprestimoActivity extends AppCompatActivity {
     private EditText edtItemEmprestado, edtObservacoes;
     private Spinner spnAmigos;
     private RadioGroup rgbPrioridadeDevolucao;
-    private CheckBox ckbFragil;
+    private CheckBox chkFragil, chkDevolucao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_emprestimo);
 
         edtItemEmprestado = findViewById(R.id.edtItemEmprestado);
         spnAmigos = findViewById(R.id.spnAmigos);
         rgbPrioridadeDevolucao = findViewById(R.id.rgbPrioridadeDevolucao);
-        ckbFragil = findViewById(R.id.ckbFragil);
+        chkFragil = findViewById(R.id.chkFragil);
         edtObservacoes = findViewById(R.id.edtObservacoes);
+        chkDevolucao = findViewById(R.id.chkDevolucao);
 
         populaSpinner();
 
@@ -59,7 +58,8 @@ public class CadastroEmprestimoActivity extends AppCompatActivity {
         edtItemEmprestado.requestFocus();
         spnAmigos.setSelection(0);
         rgbPrioridadeDevolucao.clearCheck();
-        ckbFragil.setChecked(false);
+        chkFragil.setChecked(false);
+        chkDevolucao.setChecked(false);
 
         Toast.makeText(this,
                 R.string.as_entradas_foram_apagadas,
@@ -101,7 +101,8 @@ public class CadastroEmprestimoActivity extends AppCompatActivity {
             return;
         }
 
-        boolean ehFragil = ckbFragil.isChecked();
+        boolean ehFragil = chkFragil.isChecked();
+        boolean itemDevolvido = chkDevolucao.isChecked();
 
         String observacoes = edtObservacoes.getText().toString().trim();
 
@@ -110,6 +111,7 @@ public class CadastroEmprestimoActivity extends AppCompatActivity {
                 "\n" + "Emprestado para: " + emprestadoPara +
                 "\n" + "Prioridade de devolução: " + prioridadeDevolucao +
                 "\n" + "É frágil: " + (ehFragil ? "Sim" : "Não") +
+                "\n" + "Item devolvido: " + (itemDevolvido ? "Sim" : "Não") +
                 "\n" + "Observação: " + (observacoes.isEmpty() ? "Sem preenchimento" : observacoes),
                 Toast.LENGTH_LONG).show();
     }

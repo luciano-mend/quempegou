@@ -12,13 +12,17 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.QuemPegou">
         <activity
-            android:name=".CadastroEmprestimoActivity"
+            android:name=".EmprestimosActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".CadastroEmprestimoActivity"
+            android:exported="false">
         </activity>
     </application>
 
