@@ -54,18 +54,22 @@ public class EmprestimosActivity extends AppCompatActivity {
         int[] amigos_emprestimo = getResources().getIntArray(R.array.amigos_emprestimo);
         int[] prioridadeDevolucaoEmprestimo = getResources().getIntArray(R.array.prioridade_devolucao);
         int[] fragil = getResources().getIntArray(R.array.fragil);
+        int[] devolvido = getResources().getIntArray(R.array.devolucao);
         String[] observacoesEmprestimos = getResources().getStringArray(R.array.observacoes_emprestimos);
 
         listaEmprestimos = new ArrayList<>();
 
         Emprestimo emprestimo;
         boolean ehFragil;
+        boolean emprestimoDevolvido;
         PrioridadeDevolucao prioridadeDevolucao;
 
         PrioridadeDevolucao[] prioridadeDevolucaos = PrioridadeDevolucao.values();
 
         for (int i = 0; i < itenEmprestados.length; i++) {
             ehFragil = (fragil[i] == 1);
+            emprestimoDevolvido = (devolvido[i] == 1);
+
             prioridadeDevolucao = prioridadeDevolucaos[prioridadeDevolucaoEmprestimo[i]];
 
             emprestimo = new Emprestimo(
@@ -73,6 +77,7 @@ public class EmprestimosActivity extends AppCompatActivity {
                     amigos_emprestimo[i],
                     prioridadeDevolucao,
                     ehFragil,
+                    emprestimoDevolvido,
                     observacoesEmprestimos[i]
             );
 

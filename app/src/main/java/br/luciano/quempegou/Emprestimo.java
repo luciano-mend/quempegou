@@ -11,11 +11,12 @@ public class Emprestimo {
     private boolean devolvido;
     private String observacao;
 
-    public Emprestimo(String nomeItemEmprestado, int amigo, PrioridadeDevolucao prioridadeDevolucao, boolean fragil, String observacao) {
+    public Emprestimo(String nomeItemEmprestado, int amigo, PrioridadeDevolucao prioridadeDevolucao, boolean fragil, boolean devolvido, String observacao) {
         this.nomeItemEmprestado = nomeItemEmprestado;
         this.amigo = amigo;
         this.prioridadeDevolucao = prioridadeDevolucao;
         this.fragil = fragil;
+        this.devolvido = devolvido;
         this.observacao = observacao;
     }
 

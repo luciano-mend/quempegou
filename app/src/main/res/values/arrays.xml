@@ -69,6 +69,19 @@
         <item>0</item>
     </integer-array>
 
+    <integer-array name="devolucao">
+        <item>0</item>
+        <item>1</item>
+        <item>1</item>
+        <item>0</item>
+        <item>1</item>
+        <item>1</item>
+        <item>0</item>
+        <item>1</item>
+        <item>1</item>
+        <item>0</item>
+    </integer-array>
+
     <string-array name="observacoes_emprestimos">
         <item>Cuidado não dobre as páginas!</item>
         <item>Não apague meu save game (Slot 1)!</item>
