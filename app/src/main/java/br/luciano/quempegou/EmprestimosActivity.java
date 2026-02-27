@@ -1,5 +1,6 @@
 package br.luciano.quempegou;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -29,6 +30,9 @@ public class EmprestimosActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_emprestimos);
+
+        setTitle(getString(R.string.controle_de_emprestimos));
+
 
         lsvEmprestimos = findViewById(R.id.lsvEmprestimos);
 
@@ -88,5 +92,12 @@ public class EmprestimosActivity extends AppCompatActivity {
                 listaEmprestimos);
 
         lsvEmprestimos.setAdapter(emprestimoAdapter);
+    }
+
+    public void abrirSobre(View view) {
+
+        Intent intentAbertura = new Intent(this, SobreActivity.class);
+
+        startActivity(intentAbertura);
     }
 }
