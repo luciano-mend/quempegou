@@ -1,4 +1,4 @@
-package br.luciano.quempegou;
+package br.luciano.quempegou.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -8,6 +8,9 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import java.util.List;
+
+import br.luciano.quempegou.R;
+import br.luciano.quempegou.models.Emprestimo;
 
 public class EmprestimoAdapter extends BaseAdapter {
 

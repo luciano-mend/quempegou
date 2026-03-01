@@ -43,8 +43,13 @@
     <string name="o_item_emprestado">"O item emprestado: "</string>
     <string name="foi_clicado">"\nfoi clicado!"</string>
     <string name="logo_programa">Logo do programa Quem pegou</string>
-    <string name="descricao">Exemplo de descrição do aplicativo Android</string>
+    <string name="descricao">Realiza o controle de empréstimos de itens para amigos.</string>
     <string name="autoria">Autor: Luciano Mendonça</string>
     <string name="sobre">Sobre</string>
     <string name="controle_de_emprestimos">Controle de empréstimos</string>
+    <string name="incluir">Incluir</string>
+    <string name="novo_emprestimo">Novo Empréstimo</string>
+    <string name="utfpr">UTFPR</string>
+    <string name="curso">Curso: Especialização em Tecnologia Java</string>
+    <string name="email_aluno">E-mail: lucianomendonca@alunos.utfpr.edu.br</string>
 </resources>

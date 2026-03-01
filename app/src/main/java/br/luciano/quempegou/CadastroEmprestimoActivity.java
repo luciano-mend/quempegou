@@ -1,7 +1,9 @@
 package br.luciano.quempegou;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -13,7 +15,16 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
 
+import br.luciano.quempegou.enums.PrioridadeDevolucao;
+
 public class CadastroEmprestimoActivity extends AppCompatActivity {
+
+    public static final String KEY_ITEM_EMPRESTADO = "KEY_ITEM_EMPRESTADO";
+    public static final String KEY_EMPRESTADO_PARA = "KEY_EMPRESTADO_PARA";
+    public static final String KEY_PRIORIDADE_DEVOLUCAO = "KEY_PRIORIDADE_DEVOLUCAO";
+    public static final String KEY_EH_FRAGIL = "KEY_EH_FRAGIL";
+    public static final String KEY_ITEM_DEVOLVIDO = "KEY_ITEM_DEVOLVIDO";
+    public static final String KEY_OBSERVACOES = "KEY_OBSERVACOES";
 
     private EditText edtItemEmprestado, edtObservacoes;
     private Spinner spnAmigos;
@@ -24,6 +35,8 @@ public class CadastroEmprestimoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_emprestimo);
+
+        setTitle(getString(R.string.novo_emprestimo));
 
         edtItemEmprestado = findViewById(R.id.edtItemEmprestado);
         spnAmigos = findViewById(R.id.spnAmigos);
@@ -38,15 +51,11 @@ public class CadastroEmprestimoActivity extends AppCompatActivity {
 
     private void populaSpinner() {
 
-        ArrayList<String> amisgosLista = new ArrayList<>();
-        amisgosLista.add(getString(R.string.yoda));
-        amisgosLista.add(getString(R.string.luke));
-        amisgosLista.add(getString(R.string.leia));
-        amisgosLista.add(getString(R.string.anakin));
+        String[] amigosLista = getResources().getStringArray(R.array.amigos);
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_list_item_1,
-                amisgosLista);
+                amigosLista);
 
         spnAmigos.setAdapter(adapter);
     }
@@ -78,9 +87,9 @@ public class CadastroEmprestimoActivity extends AppCompatActivity {
             return;
         }
 
-        String emprestadoPara = spnAmigos.getSelectedItem().toString();
+        int emprestadoPara = spnAmigos.getSelectedItemPosition();
 
-        if (emprestadoPara.isEmpty()) {
+        if (emprestadoPara == AdapterView.INVALID_POSITION) {
             Toast.makeText(this,
                     R.string.nao_existem_amigos_cadastrados,
                     Toast.LENGTH_LONG).show();
@@ -88,12 +97,12 @@ public class CadastroEmprestimoActivity extends AppCompatActivity {
         }
 
         int radioButtonId = rgbPrioridadeDevolucao.getCheckedRadioButtonId();
-        String prioridadeDevolucao;
+        PrioridadeDevolucao prioridadeDevolucao;
 
         if (radioButtonId == R.id.rdbBaixa) {
-            prioridadeDevolucao = getString(R.string.prioridade_baixa);
+            prioridadeDevolucao = PrioridadeDevolucao.BAIXA;
         } else if (radioButtonId == R.id.rdbAlta) {
-            prioridadeDevolucao = getString(R.string.prioridade_alta);
+            prioridadeDevolucao = PrioridadeDevolucao.ALTA;
         } else {
             Toast.makeText(this,
                     R.string.selecione_uma_prioridade_de_devolucao,
@@ -106,14 +115,18 @@ public class CadastroEmprestimoActivity extends AppCompatActivity {
 
         String observacoes = edtObservacoes.getText().toString().trim();
 
-        Toast.makeText(this,
-                "Item emprestado: " + itemEmprestado +
-                "\n" + "Emprestado para: " + emprestadoPara +
-                "\n" + "Prioridade de devolução: " + prioridadeDevolucao +
-                "\n" + "É frágil: " + (ehFragil ? "Sim" : "Não") +
-                "\n" + "Item devolvido: " + (itemDevolvido ? "Sim" : "Não") +
-                "\n" + "Observação: " + (observacoes.isEmpty() ? "Sem preenchimento" : observacoes),
-                Toast.LENGTH_LONG).show();
+        Intent intentResposta = new Intent();
+        intentResposta.putExtra(KEY_ITEM_EMPRESTADO, itemEmprestado);
+        intentResposta.putExtra(KEY_EMPRESTADO_PARA, emprestadoPara);
+        intentResposta.putExtra(KEY_PRIORIDADE_DEVOLUCAO, prioridadeDevolucao.toString());
+        intentResposta.putExtra(KEY_EH_FRAGIL, ehFragil);
+        intentResposta.putExtra(KEY_ITEM_DEVOLVIDO, itemDevolvido);
+        intentResposta.putExtra(KEY_OBSERVACOES, observacoes);
+
+        setResult(CadastroEmprestimoActivity.RESULT_OK, intentResposta);
+
+        //finaliza a activity e a resposta é devolvida
+        finish();
     }
 
 }

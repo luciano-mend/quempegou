@@ -4,20 +4,21 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import br.luciano.quempegou.adapters.EmprestimoAdapter;
 import br.luciano.quempegou.enums.PrioridadeDevolucao;
+import br.luciano.quempegou.models.Emprestimo;
 
 public class EmprestimosActivity extends AppCompatActivity {
 
@@ -54,39 +55,7 @@ public class EmprestimosActivity extends AppCompatActivity {
 
     private void popularEmprestimos() {
 
-        String[] itenEmprestados = getResources().getStringArray(R.array.item_emprestado);
-        int[] amigos_emprestimo = getResources().getIntArray(R.array.amigos_emprestimo);
-        int[] prioridadeDevolucaoEmprestimo = getResources().getIntArray(R.array.prioridade_devolucao);
-        int[] fragil = getResources().getIntArray(R.array.fragil);
-        int[] devolvido = getResources().getIntArray(R.array.devolucao);
-        String[] observacoesEmprestimos = getResources().getStringArray(R.array.observacoes_emprestimos);
-
         listaEmprestimos = new ArrayList<>();
-
-        Emprestimo emprestimo;
-        boolean ehFragil;
-        boolean emprestimoDevolvido;
-        PrioridadeDevolucao prioridadeDevolucao;
-
-        PrioridadeDevolucao[] prioridadeDevolucaos = PrioridadeDevolucao.values();
-
-        for (int i = 0; i < itenEmprestados.length; i++) {
-            ehFragil = (fragil[i] == 1);
-            emprestimoDevolvido = (devolvido[i] == 1);
-
-            prioridadeDevolucao = prioridadeDevolucaos[prioridadeDevolucaoEmprestimo[i]];
-
-            emprestimo = new Emprestimo(
-                    itenEmprestados[i],
-                    amigos_emprestimo[i],
-                    prioridadeDevolucao,
-                    ehFragil,
-                    emprestimoDevolvido,
-                    observacoesEmprestimos[i]
-            );
-
-            listaEmprestimos.add(emprestimo);
-        }
 
         emprestimoAdapter = new EmprestimoAdapter(this,
                 listaEmprestimos);
@@ -99,5 +68,42 @@ public class EmprestimosActivity extends AppCompatActivity {
         Intent intentAbertura = new Intent(this, SobreActivity.class);
 
         startActivity(intentAbertura);
+    }
+
+    ActivityResultLauncher<Intent> launcherNovoEmprestimo = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
+
+                    if (result.getResultCode() == RESULT_OK) {
+                        Intent intent = result.getData();
+
+                        Bundle bundle = intent.getExtras();
+
+                        if (bundle != null) {
+                            String itemEmprestado = bundle.getString(CadastroEmprestimoActivity.KEY_ITEM_EMPRESTADO);
+                            int emprestadoPara = bundle.getInt(CadastroEmprestimoActivity.KEY_EMPRESTADO_PARA);
+                            String prioridadeDevolucao = bundle.getString(CadastroEmprestimoActivity.KEY_PRIORIDADE_DEVOLUCAO);
+                            boolean ehFragil = bundle.getBoolean(CadastroEmprestimoActivity.KEY_EH_FRAGIL);
+                            boolean itemDevolvido = bundle.getBoolean(CadastroEmprestimoActivity.KEY_ITEM_DEVOLVIDO);
+                            String observacoes = bundle.getString(CadastroEmprestimoActivity.KEY_OBSERVACOES);
+
+                            Emprestimo emprestimo = new Emprestimo(itemEmprestado,
+                                    emprestadoPara,
+                                    PrioridadeDevolucao.valueOf(prioridadeDevolucao),
+                                    ehFragil,
+                                    itemDevolvido,
+                                    observacoes);
+
+                            listaEmprestimos.add(emprestimo);
+                            emprestimoAdapter.notifyDataSetChanged();
+                        }
+                    }
+                }
+            });
+
+    public void abrirNovoEmprestimo(View view) {
+        Intent intent = new Intent(this, CadastroEmprestimoActivity.class);
+        launcherNovoEmprestimo.launch(intent);
     }
 }

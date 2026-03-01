@@ -1,4 +1,4 @@
-package br.luciano.quempegou;
+package br.luciano.quempegou.models;
 
 import br.luciano.quempegou.enums.PrioridadeDevolucao;
 
