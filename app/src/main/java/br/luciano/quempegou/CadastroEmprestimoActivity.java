@@ -2,15 +2,19 @@ package br.luciano.quempegou;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
@@ -25,18 +29,26 @@ public class CadastroEmprestimoActivity extends AppCompatActivity {
     public static final String KEY_EH_FRAGIL = "KEY_EH_FRAGIL";
     public static final String KEY_ITEM_DEVOLVIDO = "KEY_ITEM_DEVOLVIDO";
     public static final String KEY_OBSERVACOES = "KEY_OBSERVACOES";
+    public static final String KEY_MODO = "MODO";
+
+    public static final int MODO_NOVO = 0;
+    public static final int MODO_EDITAR = 1;
+
 
     private EditText edtItemEmprestado, edtObservacoes;
     private Spinner spnAmigos;
-    private RadioGroup rgbPrioridadeDevolucao;
     private CheckBox chkFragil, chkDevolucao;
+    private RadioGroup rgbPrioridadeDevolucao;
+    private RadioButton rdbBaixa, rdbAlta;
+
+
+    private int modo;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_emprestimo);
-
-        setTitle(getString(R.string.novo_emprestimo));
 
         edtItemEmprestado = findViewById(R.id.edtItemEmprestado);
         spnAmigos = findViewById(R.id.spnAmigos);
@@ -44,8 +56,54 @@ public class CadastroEmprestimoActivity extends AppCompatActivity {
         chkFragil = findViewById(R.id.chkFragil);
         edtObservacoes = findViewById(R.id.edtObservacoes);
         chkDevolucao = findViewById(R.id.chkDevolucao);
+        rdbBaixa = findViewById(R.id.rdbBaixa);
+        rdbAlta = findViewById(R.id.rdbAlta);
 
         populaSpinner();
+
+        Intent intent = getIntent();
+
+        Bundle bundle = intent.getExtras();
+
+        if (bundle != null) {
+            modo = bundle.getInt(KEY_MODO);
+
+            if (modo == MODO_NOVO) {
+                setTitle(getString(R.string.novo_emprestimo));
+            } else {
+                setTitle(getString(R.string.editar_emprestimo));
+
+                String itemEmprestado = bundle.getString(CadastroEmprestimoActivity.KEY_ITEM_EMPRESTADO);
+                int emprestadoPara = bundle.getInt(CadastroEmprestimoActivity.KEY_EMPRESTADO_PARA);
+                String prioridadeDevolucaoTexto = bundle.getString(CadastroEmprestimoActivity.KEY_PRIORIDADE_DEVOLUCAO);
+                boolean ehFragil = bundle.getBoolean(CadastroEmprestimoActivity.KEY_EH_FRAGIL);
+                boolean itemDevolvido = bundle.getBoolean(CadastroEmprestimoActivity.KEY_ITEM_DEVOLVIDO);
+                String observacoes = bundle.getString(CadastroEmprestimoActivity.KEY_OBSERVACOES);
+
+                PrioridadeDevolucao prioridadeDevolucao = PrioridadeDevolucao.valueOf(prioridadeDevolucaoTexto);
+
+                edtItemEmprestado.setText(itemEmprestado);
+                spnAmigos.setSelection(emprestadoPara);
+
+                switch (prioridadeDevolucao) {
+                    case BAIXA:
+                        rdbBaixa.setChecked(true);
+                        break;
+                    case ALTA:
+                        rdbAlta.setChecked(true);
+                        break;
+                }
+
+                if (ehFragil) {
+                    chkFragil.setChecked(true);
+                }
+
+                if (itemDevolvido) {
+                    chkDevolucao.setChecked(true);
+                }
+                edtObservacoes.setText(observacoes);
+            }
+        }
 
     }
 
@@ -60,7 +118,7 @@ public class CadastroEmprestimoActivity extends AppCompatActivity {
         spnAmigos.setAdapter(adapter);
     }
 
-    public void limparCampos(View view) {
+    public void limparCampos() {
 
         edtItemEmprestado.setText(null);
         edtObservacoes.setText(null);
@@ -75,7 +133,7 @@ public class CadastroEmprestimoActivity extends AppCompatActivity {
                 Toast.LENGTH_LONG).show();
     }
 
-    public void salvarValores(View view) {
+    public void salvarValores() {
         String itemEmprestado = edtItemEmprestado.getText().toString().trim();
 
         if (itemEmprestado.isEmpty()) {
@@ -129,4 +187,26 @@ public class CadastroEmprestimoActivity extends AppCompatActivity {
         finish();
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.cadastro_opcoes, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int idMenuItem = item.getItemId();
+
+        if (idMenuItem == R.id.mniSalvar) {
+            salvarValores();
+            return true;
+        } else {
+            if (idMenuItem == R.id.mniLimpar) {
+                limparCampos();
+                return true;
+            } else {
+                return super.onOptionsItemSelected(item);
+            }
+        }
+    }
 }

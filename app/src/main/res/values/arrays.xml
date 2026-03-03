@@ -17,14 +17,12 @@
     <string-array name="amigos">
         <item>Luke Skywalker</item>
         <item>Leia Organa</item>
-        <item>Han Solo</item>
         <item>Chewbacca</item>
         <item>Obi-Wan Kenobi</item>
         <item>Darth Vader</item>
         <item>Mestre Yoda</item>
         <item>R2-D2</item>
         <item>C-3PO</item>
-        <item>Lando Calrissian</item>
         <item>Boba Fett</item>
         <item>Din Djarin (Mando)</item>
     </string-array>
