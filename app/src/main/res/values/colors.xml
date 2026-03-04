@@ -5,5 +5,6 @@
     <color name="azul_principal">#09637E</color>
     <color name="azul_secundario">#088395</color>
     <color name="azul_esverdeado">#7AB2B2</color>
+    <color name="azul_selecionado">#9CD5FF</color>
     <color name="branco_acinzentado">#EBF4F6</color>
 </resources>

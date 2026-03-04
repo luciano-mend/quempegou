@@ -1,7 +1,6 @@
 package br.luciano.quempegou;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.Menu;
@@ -18,6 +17,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.ActionMode;
+import androidx.core.content.ContextCompat;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -116,7 +116,7 @@ public class EmprestimosActivity extends AppCompatActivity {
 
                 viewSelecionada = view;
                 backgroundDrawable = view.getBackground();
-                view.setBackgroundColor(Color.LTGRAY);
+                view.setBackgroundColor(ContextCompat.getColor(EmprestimosActivity.this, R.color.azul_selecionado));
 
                 lsvEmprestimos.setEnabled(false);
 
