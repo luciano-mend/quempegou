@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
@@ -17,9 +16,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.util.ArrayList;
-
 import br.luciano.quempegou.enums.PrioridadeDevolucao;
+import br.luciano.quempegou.models.Emprestimo;
 
 public class CadastroEmprestimoActivity extends AppCompatActivity {
 
@@ -43,7 +41,7 @@ public class CadastroEmprestimoActivity extends AppCompatActivity {
 
 
     private int modo;
-
+    private Emprestimo emprestimoOriginal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +79,14 @@ public class CadastroEmprestimoActivity extends AppCompatActivity {
                 String observacoes = bundle.getString(CadastroEmprestimoActivity.KEY_OBSERVACOES);
 
                 PrioridadeDevolucao prioridadeDevolucao = PrioridadeDevolucao.valueOf(prioridadeDevolucaoTexto);
+
+                emprestimoOriginal = new Emprestimo(
+                        itemEmprestado,
+                        emprestadoPara,
+                        prioridadeDevolucao,
+                        ehFragil,
+                        itemDevolvido,
+                        observacoes);
 
                 edtItemEmprestado.setText(itemEmprestado);
                 spnAmigos.setSelection(emprestadoPara);
@@ -172,6 +178,20 @@ public class CadastroEmprestimoActivity extends AppCompatActivity {
         boolean itemDevolvido = chkDevolucao.isChecked();
 
         String observacoes = edtObservacoes.getText().toString().trim();
+
+        if (modo == MODO_EDITAR &&
+                itemEmprestado.equals(emprestimoOriginal.getNomeItemEmprestado()) &&
+                emprestadoPara == emprestimoOriginal.getAmigo() &&
+                prioridadeDevolucao == emprestimoOriginal.getPrioridadeDevolucao() &&
+                ehFragil == emprestimoOriginal.isFragil() &&
+                itemDevolvido == emprestimoOriginal.isDevolvido() &&
+                observacoes.equals(emprestimoOriginal.getObservacao())) {
+
+            //não houve alteração
+            setResult(CadastroEmprestimoActivity.RESULT_CANCELED);
+            finish();
+            return;
+        }
 
         Intent intentResposta = new Intent();
         intentResposta.putExtra(KEY_ITEM_EMPRESTADO, itemEmprestado);

@@ -1,14 +1,15 @@
 package br.luciano.quempegou;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.view.ContextMenu;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
@@ -16,6 +17,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.view.ActionMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +35,58 @@ public class EmprestimosActivity extends AppCompatActivity {
 
     private int posicaoSelecionada = -1;
 
+    private ActionMode actionMode;
+
+    private View viewSelecionada;
+    private Drawable backgroundDrawable;
+
+
+    private ActionMode.Callback actionCallback = new ActionMode.Callback() {
+        @Override
+        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+            MenuInflater inflater = mode.getMenuInflater();
+            inflater.inflate(R.menu.emprestimos_item_selecionado, menu);
+
+            return true;
+        }
+
+        @Override
+        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+            return false;
+        }
+
+        @Override
+        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+
+            int idMenuItem = item.getItemId();
+
+            if (idMenuItem == R.id.mniEditar) {
+                editarEmprestimo();
+                return true;
+            } else {
+                if (idMenuItem == R.id.mniExcluir) {
+                    excluirEmprestimo();
+                    mode.finish();
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        }
+
+        @Override
+        public void onDestroyActionMode(ActionMode mode) {
+            if (viewSelecionada != null) {
+                viewSelecionada.setBackground(backgroundDrawable);
+            }
+            actionMode = null;
+            viewSelecionada = null;
+            backgroundDrawable = null;
+            posicaoSelecionada = -1;
+            lsvEmprestimos.setEnabled(true);
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,14 +99,31 @@ public class EmprestimosActivity extends AppCompatActivity {
 
         lsvEmprestimos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+            public void onItemClick(AdapterView<?> adapterView, View view, int posicao, long l) {
+                posicaoSelecionada = posicao;
 
-                Emprestimo emprestimo = (Emprestimo) lsvEmprestimos.getItemAtPosition(i);
+                editarEmprestimo();
+            }
+        });
 
-                Toast.makeText(getApplicationContext(),
-                        getString(R.string.o_item_emprestado) + emprestimo.getNomeItemEmprestado() + getString(R.string.foi_clicado),
-                        Toast.LENGTH_LONG).show();
+        lsvEmprestimos.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int posicao, long l) {
+                if (actionMode != null) {
+                    return false;
+                }
+                posicaoSelecionada = posicao;
 
+                viewSelecionada = view;
+                backgroundDrawable = view.getBackground();
+                view.setBackgroundColor(Color.LTGRAY);
+
+                lsvEmprestimos.setEnabled(false);
+
+                actionMode = startSupportActionMode(actionCallback);
+
+
+                return true;
             }
         });
         
@@ -174,12 +245,15 @@ public class EmprestimosActivity extends AppCompatActivity {
                     }
 
                     posicaoSelecionada = -1;
+
+                    if (actionMode != null) {
+                        actionMode.finish();
+                    }
+
                 }
             });
 
-    private void editarEmprestimo(int posicao) {
-        posicaoSelecionada = posicao;
-
+    private void editarEmprestimo() {
         Emprestimo emprestimo = listaEmprestimos.get(posicaoSelecionada);
 
         Intent intent = new Intent(this, CadastroEmprestimoActivity.class);
@@ -195,35 +269,8 @@ public class EmprestimosActivity extends AppCompatActivity {
         launcherEditarEmprestimo.launch(intent);
     }
 
-    private void excluirEmprestimo(int posicao) {
-        listaEmprestimos.remove(posicao);
+    private void excluirEmprestimo() {
+        listaEmprestimos.remove(posicaoSelecionada);
         emprestimoAdapter.notifyDataSetChanged();
-    }
-
-    @Override
-    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-        super.onCreateContextMenu(menu, v, menuInfo);
-
-        getMenuInflater().inflate(R.menu.emprestimos_item_selecionado, menu);
-    }
-
-    @Override
-    public boolean onContextItemSelected(@NonNull MenuItem item) {
-
-        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-
-        int idMenuItem = item.getItemId();
-
-        if (idMenuItem == R.id.mniEditar) {
-            editarEmprestimo(info.position);
-            return true;
-        } else {
-            if (idMenuItem == R.id.mniExcluir) {
-                excluirEmprestimo(info.position);
-                return true;
-            } else {
-                return super.onContextItemSelected(item);
-            }
-        }
     }
 }
