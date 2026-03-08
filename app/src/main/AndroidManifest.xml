@@ -17,8 +17,8 @@
             android:parentActivityName=".EmprestimosActivity"/>
         <activity
             android:name=".EmprestimosActivity"
-            android:exported="true">
-<!--            android:launchMode="singleTask">-->
+            android:exported="true"
+            android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
