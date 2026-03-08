@@ -1,8 +1,17 @@
 package br.luciano.quempegou.models;
 
+import java.util.Comparator;
+
 import br.luciano.quempegou.enums.PrioridadeDevolucao;
 
 public class Emprestimo {
+
+    public static Comparator<Emprestimo> ordenacaoCrescente = new Comparator<Emprestimo>() {
+        @Override
+        public int compare(Emprestimo emprestimo1, Emprestimo emprestimo2) {
+            return emprestimo1.getNomeItemEmprestado().compareToIgnoreCase(emprestimo2.getNomeItemEmprestado());
+        }
+    };
 
     private String nomeItemEmprestado;
     private int amigo;

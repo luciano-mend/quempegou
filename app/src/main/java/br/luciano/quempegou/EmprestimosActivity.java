@@ -20,6 +20,7 @@ import androidx.appcompat.view.ActionMode;
 import androidx.core.content.ContextCompat;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import br.luciano.quempegou.adapters.EmprestimoAdapter;
@@ -175,6 +176,8 @@ public class EmprestimosActivity extends AppCompatActivity {
                                     observacoes);
 
                             listaEmprestimos.add(emprestimo);
+
+                            Collections.sort(listaEmprestimos, Emprestimo.ordenacaoCrescente);
                             emprestimoAdapter.notifyDataSetChanged();
                         }
                     }
@@ -238,6 +241,8 @@ public class EmprestimosActivity extends AppCompatActivity {
                             emprestimo.setFragil(ehFragil);
                             emprestimo.setDevolvido(itemDevolvido);
                             emprestimo.setObservacao(observacoes);
+
+                            Collections.sort(listaEmprestimos, Emprestimo.ordenacaoCrescente);
 
                             emprestimoAdapter.notifyDataSetChanged();
                         }
