@@ -13,10 +13,12 @@
         android:theme="@style/Theme.QuemPegou">
         <activity
             android:name=".SobreActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:parentActivityName=".EmprestimosActivity"/>
         <activity
             android:name=".EmprestimosActivity"
             android:exported="true">
+<!--            android:launchMode="singleTask">-->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -25,7 +27,8 @@
         </activity>
         <activity
             android:name=".CadastroEmprestimoActivity"
-            android:exported="false"></activity>
+            android:exported="false"
+            android:parentActivityName=".EmprestimosActivity"/>
     </application>
 
 </manifest>
