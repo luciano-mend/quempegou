@@ -46,7 +46,7 @@ public class CadastroEmprestimoActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_emprestimo);
+        setContentView(R.layout.activity_cadastro_emprestimo);
 
         edtItemEmprestado = findViewById(R.id.edtItemEmprestado);
         spnAmigos = findViewById(R.id.spnAmigos);

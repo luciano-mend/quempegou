@@ -55,4 +55,5 @@
     <string name="editar">Editar</string>
     <string name="excluir">Excluir</string>
     <string name="editar_emprestimo">Editar Empréstimo</string>
+    <string name="ordenar_nao_devolvidos">Itens não devolvidos primeiro?</string>
 </resources>

@@ -13,6 +13,19 @@ public class Emprestimo {
         }
     };
 
+    public static Comparator<Emprestimo> ordenacaoNaoDevolvidos = new Comparator<Emprestimo>() {
+        @Override
+        public int compare(Emprestimo emprestimo1, Emprestimo emprestimo2) {
+            int resultado = Boolean.compare(emprestimo1.isDevolvido(), emprestimo2.isDevolvido());
+
+            if (resultado == 0) {
+                resultado = emprestimo1.getNomeItemEmprestado().compareToIgnoreCase(emprestimo2.getNomeItemEmprestado());
+            }
+
+            return resultado;
+        }
+    };
+
     private String nomeItemEmprestado;
     private int amigo;
     private PrioridadeDevolucao prioridadeDevolucao;

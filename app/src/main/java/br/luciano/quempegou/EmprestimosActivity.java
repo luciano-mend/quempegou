@@ -1,6 +1,7 @@
 package br.luciano.quempegou;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.Menu;
@@ -41,6 +42,11 @@ public class EmprestimosActivity extends AppCompatActivity {
     private View viewSelecionada;
     private Drawable backgroundDrawable;
 
+    public static final String ARQUIVO_PREFERENCIAS = "br.luciano.quempegou.PREFERENCIAS";
+
+    private boolean ordenacaoNaoDevolvidos = false;
+
+    public static final String KEY_ORDENACAO_NAO_DEVOLVIDOS = "ORDENACAO_NAO_DEVOLVIDOS";
 
     private ActionMode.Callback actionCallback = new ActionMode.Callback() {
         @Override
@@ -95,6 +101,7 @@ public class EmprestimosActivity extends AppCompatActivity {
 
         setTitle(getString(R.string.controle_de_emprestimos));
 
+        lerPreferencias();
 
         lsvEmprestimos = findViewById(R.id.lsvEmprestimos);
 
@@ -177,7 +184,8 @@ public class EmprestimosActivity extends AppCompatActivity {
 
                             listaEmprestimos.add(emprestimo);
 
-                            Collections.sort(listaEmprestimos, Emprestimo.ordenacaoCrescente);
+                            definirOrdenacao();
+
                             emprestimoAdapter.notifyDataSetChanged();
                         }
                     }
@@ -209,6 +217,18 @@ public class EmprestimosActivity extends AppCompatActivity {
         } else {
             if (idMenuItem == R.id.mniSobre) {
                 abrirSobre();
+                return true;
+            } if (idMenuItem == R.id.mniOrdenarNaoDevolvidos) {
+                boolean valor = !item.isChecked();
+
+                salvarPreferencias(valor);
+                item.setChecked(valor);
+
+                if (!listaEmprestimos.isEmpty()) {
+                    definirOrdenacao();
+                    emprestimoAdapter.notifyDataSetChanged();
+                }
+
                 return true;
             } else {
                 return super.onOptionsItemSelected(item);
@@ -242,7 +262,7 @@ public class EmprestimosActivity extends AppCompatActivity {
                             emprestimo.setDevolvido(itemDevolvido);
                             emprestimo.setObservacao(observacoes);
 
-                            Collections.sort(listaEmprestimos, Emprestimo.ordenacaoCrescente);
+                            definirOrdenacao();
 
                             emprestimoAdapter.notifyDataSetChanged();
                         }
@@ -274,8 +294,38 @@ public class EmprestimosActivity extends AppCompatActivity {
         launcherEditarEmprestimo.launch(intent);
     }
 
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        menu.findItem(R.id.mniOrdenarNaoDevolvidos).setChecked(ordenacaoNaoDevolvidos);
+        return true;
+    }
+
     private void excluirEmprestimo() {
         listaEmprestimos.remove(posicaoSelecionada);
         emprestimoAdapter.notifyDataSetChanged();
+    }
+
+    private void lerPreferencias() {
+        SharedPreferences shared = getSharedPreferences(ARQUIVO_PREFERENCIAS, MODE_PRIVATE);
+
+        // busco a chave, caso ela não exista ela será criada com o valor da variável, pois ela já contem o valor false por padrão
+        ordenacaoNaoDevolvidos = shared.getBoolean(KEY_ORDENACAO_NAO_DEVOLVIDOS, ordenacaoNaoDevolvidos);
+    }
+
+    private void salvarPreferencias(boolean novoValor) {
+        SharedPreferences shared = getSharedPreferences(ARQUIVO_PREFERENCIAS, MODE_PRIVATE);
+        SharedPreferences.Editor editor = shared.edit();
+        editor.putBoolean(KEY_ORDENACAO_NAO_DEVOLVIDOS, novoValor);
+        editor.apply();
+
+        ordenacaoNaoDevolvidos = novoValor;
+    }
+
+    private void definirOrdenacao() {
+        if (ordenacaoNaoDevolvidos) {
+            Collections.sort(listaEmprestimos, Emprestimo.ordenacaoNaoDevolvidos);
+        } else {
+            Collections.sort(listaEmprestimos, Emprestimo.ordenacaoCrescente);
+        }
     }
 }
