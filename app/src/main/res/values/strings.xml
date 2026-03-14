@@ -56,4 +56,6 @@
     <string name="excluir">Excluir</string>
     <string name="editar_emprestimo">Editar Empréstimo</string>
     <string name="ordenar_nao_devolvidos">Itens não devolvidos primeiro?</string>
+    <string name="restaurar_padroes">Restaurar padrões</string>
+    <string name="configuracoes_padroes_restauradas">Configurações padrões restauradas!</string>
 </resources>

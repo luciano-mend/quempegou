@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
@@ -48,7 +49,7 @@ public class EmprestimosActivity extends AppCompatActivity {
 
     public static final String KEY_ORDENACAO_NAO_DEVOLVIDOS = "ORDENACAO_NAO_DEVOLVIDOS";
 
-    private ActionMode.Callback actionCallback = new ActionMode.Callback() {
+    private final ActionMode.Callback actionCallback = new ActionMode.Callback() {
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
             MenuInflater inflater = mode.getMenuInflater();
@@ -185,8 +186,6 @@ public class EmprestimosActivity extends AppCompatActivity {
                             listaEmprestimos.add(emprestimo);
 
                             definirOrdenacao();
-
-                            emprestimoAdapter.notifyDataSetChanged();
                         }
                     }
                 }
@@ -226,8 +225,16 @@ public class EmprestimosActivity extends AppCompatActivity {
 
                 if (!listaEmprestimos.isEmpty()) {
                     definirOrdenacao();
-                    emprestimoAdapter.notifyDataSetChanged();
                 }
+
+                return true;
+            } if (idMenuItem == R.id.mniRestaurar) {
+                restaurarPadroes();
+                definirOrdenacao();
+
+                Toast.makeText(this,
+                        getString(R.string.configuracoes_padroes_restauradas),
+                        Toast.LENGTH_SHORT).show();
 
                 return true;
             } else {
@@ -263,8 +270,6 @@ public class EmprestimosActivity extends AppCompatActivity {
                             emprestimo.setObservacao(observacoes);
 
                             definirOrdenacao();
-
-                            emprestimoAdapter.notifyDataSetChanged();
                         }
 
                     }
@@ -327,5 +332,16 @@ public class EmprestimosActivity extends AppCompatActivity {
         } else {
             Collections.sort(listaEmprestimos, Emprestimo.ordenacaoCrescente);
         }
+
+        emprestimoAdapter.notifyDataSetChanged();
+    }
+
+    private void restaurarPadroes() {
+        SharedPreferences shared = getSharedPreferences(ARQUIVO_PREFERENCIAS, MODE_PRIVATE);
+        SharedPreferences.Editor editor = shared.edit();
+        editor.clear();
+        editor.apply();
+
+        ordenacaoNaoDevolvidos = false;
     }
 }
