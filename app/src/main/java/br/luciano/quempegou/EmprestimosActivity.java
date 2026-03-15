@@ -45,7 +45,7 @@ public class EmprestimosActivity extends AppCompatActivity {
 
     public static final String ARQUIVO_PREFERENCIAS = "br.luciano.quempegou.PREFERENCIAS";
 
-    private boolean ordenacaoNaoDevolvidos = false;
+    private boolean ordenacaoNaoDevolvidos = true;
 
     public static final String KEY_ORDENACAO_NAO_DEVOLVIDOS = "ORDENACAO_NAO_DEVOLVIDOS";
 
@@ -342,6 +342,6 @@ public class EmprestimosActivity extends AppCompatActivity {
         editor.clear();
         editor.apply();
 
-        ordenacaoNaoDevolvidos = false;
+        ordenacaoNaoDevolvidos = true;
     }
 }

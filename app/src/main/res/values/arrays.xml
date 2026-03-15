@@ -1,18 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    
-    <string-array name="item_emprestado">
-        <item>@string/item_clean_code</item>
-        <item>@string/item_zelda</item>
-        <item>@string/item_arduino</item>
-        <item>@string/item_hub_usbc</item>
-        <item>@string/item_hd_externo</item>
-        <item>@string/item_kindle</item>
-        <item>@string/item_rpg_dnd</item>
-        <item>@string/item_headset</item>
-        <item>@string/item_gopro</item>
-        <item>@string/item_ferramentas</item>
-    </string-array>
 
     <string-array name="amigos">
         <item>Luke Skywalker</item>
@@ -27,69 +14,4 @@
         <item>Din Djarin (Mando)</item>
     </string-array>
 
-    <string-array name="amigos_emprestimo">
-        <item>0</item>
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-        <item>4</item>
-        <item>5</item>
-        <item>6</item>
-        <item>7</item>
-        <item>8</item>
-        <item>9</item>
-    </string-array>
-
-<!--    devolução -->
-    <integer-array name="prioridade_devolucao">
-        <item>1</item>
-        <item>0</item>
-        <item>0</item>
-        <item>1</item>
-        <item>2</item>
-        <item>0</item>
-        <item>1</item>
-        <item>2</item>
-        <item>2</item>
-        <item>0</item>
-    </integer-array>
-
-    <integer-array name="fragil">
-        <item>0</item>
-        <item>1</item>
-        <item>1</item>
-        <item>0</item>
-        <item>1</item>
-        <item>1</item>
-        <item>0</item>
-        <item>1</item>
-        <item>1</item>
-        <item>0</item>
-    </integer-array>
-
-    <integer-array name="devolucao">
-        <item>0</item>
-        <item>1</item>
-        <item>1</item>
-        <item>0</item>
-        <item>1</item>
-        <item>1</item>
-        <item>0</item>
-        <item>1</item>
-        <item>1</item>
-        <item>0</item>
-    </integer-array>
-
-    <string-array name="observacoes_emprestimos">
-        <item>Cuidado não dobre as páginas!</item>
-        <item>Não apague meu save game (Slot 1)!</item>
-        <item>Verifique se todos os jumpers voltaram na caixa.</item>
-        <item>A porta HDMI as vezes precisa apertar um pouco.</item>
-        <item>Cuidado, não ejete sem remover com segurança.</item>
-        <item>A bateria dura semanas, mas a tela risca fácil.</item>
-        <item>Pode usar na mesa, mas cuidado com líquido.</item>
-        <item>Devolver carregado.</item>
-        <item>Lave com água doce se usar no mar.</item>
-        <item>Confira se todas as pontas magnéticas estão no estojo.</item>
-    </string-array>
 </resources>
