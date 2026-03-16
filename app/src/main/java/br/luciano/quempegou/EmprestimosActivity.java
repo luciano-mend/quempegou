@@ -22,7 +22,6 @@ import androidx.appcompat.view.ActionMode;
 import androidx.core.content.ContextCompat;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import br.luciano.quempegou.adapters.EmprestimoAdapter;
@@ -159,7 +158,7 @@ public class EmprestimosActivity extends AppCompatActivity {
     }
 
     ActivityResultLauncher<Intent> launcherNovoEmprestimo = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
-            new ActivityResultCallback<ActivityResult>() {
+            new ActivityResultCallback<>() {
                 @Override
                 public void onActivityResult(ActivityResult result) {
 
@@ -244,7 +243,7 @@ public class EmprestimosActivity extends AppCompatActivity {
     }
 
     ActivityResultLauncher<Intent> launcherEditarEmprestimo = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
-            new ActivityResultCallback<ActivityResult>() {
+            new ActivityResultCallback<>() {
                 @Override
                 public void onActivityResult(ActivityResult result) {
 
@@ -328,9 +327,9 @@ public class EmprestimosActivity extends AppCompatActivity {
 
     private void definirOrdenacao() {
         if (ordenacaoNaoDevolvidos) {
-            Collections.sort(listaEmprestimos, Emprestimo.ordenacaoNaoDevolvidos);
+            listaEmprestimos.sort(Emprestimo.ordenacaoNaoDevolvidos);
         } else {
-            Collections.sort(listaEmprestimos, Emprestimo.ordenacaoCrescente);
+            listaEmprestimos.sort(Emprestimo.ordenacaoCrescente);
         }
 
         emprestimoAdapter.notifyDataSetChanged();
