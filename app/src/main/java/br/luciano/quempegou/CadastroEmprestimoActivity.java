@@ -18,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import br.luciano.quempegou.enums.PrioridadeDevolucao;
 import br.luciano.quempegou.models.Emprestimo;
+import br.luciano.quempegou.utils.UtilsAlert;
 
 public class CadastroEmprestimoActivity extends AppCompatActivity {
 
@@ -143,9 +144,9 @@ public class CadastroEmprestimoActivity extends AppCompatActivity {
         String itemEmprestado = edtItemEmprestado.getText().toString().trim();
 
         if (itemEmprestado.isEmpty()) {
-            Toast.makeText(this,
-                    R.string.campo_item_emprestado_nao_preenchido,
-                    Toast.LENGTH_LONG).show();
+
+            UtilsAlert.mostrarAviso(this,
+                    R.string.campo_item_emprestado_nao_preenchido);
 
             edtItemEmprestado.requestFocus();
             return;
@@ -154,9 +155,9 @@ public class CadastroEmprestimoActivity extends AppCompatActivity {
         int emprestadoPara = spnAmigos.getSelectedItemPosition();
 
         if (emprestadoPara == AdapterView.INVALID_POSITION) {
-            Toast.makeText(this,
-                    R.string.nao_existem_amigos_cadastrados,
-                    Toast.LENGTH_LONG).show();
+            UtilsAlert.mostrarAviso(this,
+                    R.string.nao_existem_amigos_cadastrados);
+
             return;
         }
 
@@ -168,9 +169,9 @@ public class CadastroEmprestimoActivity extends AppCompatActivity {
         } else if (radioButtonId == R.id.rdbAlta) {
             prioridadeDevolucao = PrioridadeDevolucao.ALTA;
         } else {
-            Toast.makeText(this,
-                    R.string.selecione_uma_prioridade_de_devolucao,
-                    Toast.LENGTH_LONG).show();
+            UtilsAlert.mostrarAviso(this,
+                    R.string.selecione_uma_prioridade_de_devolucao);
+
             return;
         }
 
