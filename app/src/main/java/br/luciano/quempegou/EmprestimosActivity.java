@@ -1,5 +1,6 @@
 package br.luciano.quempegou;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
@@ -27,6 +28,7 @@ import java.util.List;
 import br.luciano.quempegou.adapters.EmprestimoAdapter;
 import br.luciano.quempegou.enums.PrioridadeDevolucao;
 import br.luciano.quempegou.models.Emprestimo;
+import br.luciano.quempegou.utils.UtilsAlert;
 
 public class EmprestimosActivity extends AppCompatActivity {
 
@@ -73,7 +75,6 @@ public class EmprestimosActivity extends AppCompatActivity {
             } else {
                 if (idMenuItem == R.id.mniExcluir) {
                     excluirEmprestimo();
-                    mode.finish();
                     return true;
                 } else {
                     return false;
@@ -228,12 +229,7 @@ public class EmprestimosActivity extends AppCompatActivity {
 
                 return true;
             } if (idMenuItem == R.id.mniRestaurar) {
-                restaurarPadroes();
-                definirOrdenacao();
-
-                Toast.makeText(this,
-                        getString(R.string.configuracoes_padroes_restauradas),
-                        Toast.LENGTH_SHORT).show();
+                confirmaRestaurarPadroes();
 
                 return true;
             } else {
@@ -305,8 +301,21 @@ public class EmprestimosActivity extends AppCompatActivity {
     }
 
     private void excluirEmprestimo() {
-        listaEmprestimos.remove(posicaoSelecionada);
-        emprestimoAdapter.notifyDataSetChanged();
+
+        Emprestimo emprestimo = listaEmprestimos.get(posicaoSelecionada);
+
+        String mensagem = getString(R.string.confirmacao_exclusao_emprestimo, emprestimo.getNomeItemEmprestado().toUpperCase());
+
+        DialogInterface.OnClickListener listenerSim = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                listaEmprestimos.remove(posicaoSelecionada);
+                emprestimoAdapter.notifyDataSetChanged();
+                actionMode.finish();
+            }
+        };
+
+        UtilsAlert.confirmarAcao(this, mensagem, listenerSim, null);
     }
 
     private void lerPreferencias() {
@@ -333,6 +342,27 @@ public class EmprestimosActivity extends AppCompatActivity {
         }
 
         emprestimoAdapter.notifyDataSetChanged();
+    }
+
+    private void confirmaRestaurarPadroes() {
+        DialogInterface.OnClickListener listenerSim = new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                restaurarPadroes();
+                definirOrdenacao();
+
+                Toast.makeText(EmprestimosActivity.this,
+                        getString(R.string.configuracoes_padroes_restauradas),
+                        Toast.LENGTH_SHORT).show();
+            }
+        };
+
+        UtilsAlert.confirmarAcao(this,
+                R.string.deseja_voltar_padroes,
+                listenerSim,
+                null);
+
     }
 
     private void restaurarPadroes() {

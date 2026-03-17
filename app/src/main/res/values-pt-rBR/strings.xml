@@ -41,4 +41,11 @@
     <string name="ordenar_nao_devolvidos">Itens não devolvidos primeiro?</string>
     <string name="restaurar_padroes">Restaurar padrões</string>
     <string name="configuracoes_padroes_restauradas">Configurações padrões restauradas!</string>
+    <string name="aviso">Aviso</string>
+    <string name="ok">OK</string>
+    <string name="sim">Sim</string>
+    <string name="nao">Não</string>
+    <string name="confirmacao">Confirmação</string>
+    <string name="confirmacao_exclusao_emprestimo">Deseja excluir?\n\"%1$s\"</string>
+    <string name="deseja_voltar_padroes">Deseja restaurar os padrões?</string>
 </resources>

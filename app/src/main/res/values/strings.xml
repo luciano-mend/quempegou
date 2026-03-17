@@ -42,4 +42,11 @@
     <string name="ordenar_nao_devolvidos">Show non-returned items first?</string>
     <string name="restaurar_padroes">Restore defaults</string>
     <string name="configuracoes_padroes_restauradas">Default settings restored!</string>
+    <string name="aviso">Warning</string>
+    <string name="ok">OK</string>
+    <string name="sim">Yes</string>
+    <string name="nao">No</string>
+    <string name="confirmacao">Confirmation</string>
+    <string name="confirmacao_exclusao_emprestimo">Do you want to delete?\n\"%1$s\"</string>
+    <string name="deseja_voltar_padroes">Do you want do restore defaults?</string>
 </resources>
