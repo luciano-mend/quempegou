@@ -1,4 +1,4 @@
-package br.luciano.quempegou.enums;
+package br.luciano.quempegou.models;
 
 public enum PrioridadeDevolucao {
     VAZIO,

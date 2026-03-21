@@ -16,7 +16,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import br.luciano.quempegou.enums.PrioridadeDevolucao;
+import br.luciano.quempegou.models.PrioridadeDevolucao;
 import br.luciano.quempegou.models.Emprestimo;
 import br.luciano.quempegou.utils.UtilsAlert;
 
