@@ -1,19 +1,23 @@
 package br.luciano.quempegou.models;
 
+import androidx.annotation.NonNull;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
 import java.util.Comparator;
 
-import br.luciano.quempegou.enums.PrioridadeDevolucao;
-
+@Entity
 public class Emprestimo {
 
-    public static Comparator<Emprestimo> ordenacaoCrescente = new Comparator<Emprestimo>() {
+    public static Comparator<Emprestimo> ordenacaoCrescente = new Comparator<>() {
         @Override
         public int compare(Emprestimo emprestimo1, Emprestimo emprestimo2) {
             return emprestimo1.getNomeItemEmprestado().compareToIgnoreCase(emprestimo2.getNomeItemEmprestado());
         }
     };
 
-    public static Comparator<Emprestimo> ordenacaoNaoDevolvidos = new Comparator<Emprestimo>() {
+    public static Comparator<Emprestimo> ordenacaoNaoDevolvidos = new Comparator<>() {
         @Override
         public int compare(Emprestimo emprestimo1, Emprestimo emprestimo2) {
             int resultado = Boolean.compare(emprestimo1.isDevolvido(), emprestimo2.isDevolvido());
@@ -26,6 +30,10 @@ public class Emprestimo {
         }
     };
 
+    @PrimaryKey(autoGenerate = true)
+    private Long id;
+    @NonNull
+    @ColumnInfo(index = true)
     private String nomeItemEmprestado;
     private int amigo;
     private PrioridadeDevolucao prioridadeDevolucao;
@@ -40,6 +48,14 @@ public class Emprestimo {
         this.fragil = fragil;
         this.devolvido = devolvido;
         this.observacao = observacao;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getNomeItemEmprestado() {
