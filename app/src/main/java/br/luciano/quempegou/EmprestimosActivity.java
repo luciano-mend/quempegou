@@ -28,6 +28,7 @@ import java.util.List;
 import br.luciano.quempegou.adapters.EmprestimoAdapter;
 import br.luciano.quempegou.models.PrioridadeDevolucao;
 import br.luciano.quempegou.models.Emprestimo;
+import br.luciano.quempegou.persistencia.EmprestimosDatabase;
 import br.luciano.quempegou.utils.UtilsAlert;
 
 public class EmprestimosActivity extends AppCompatActivity {
@@ -143,7 +144,11 @@ public class EmprestimosActivity extends AppCompatActivity {
 
     private void popularEmprestimos() {
 
-        listaEmprestimos = new ArrayList<>();
+        if (ordenacaoNaoDevolvidos) {
+            listaEmprestimos = EmprestimosDatabase.getInstance(this).getEmprestimoDao().getAllAscendingNaoDevolvidos();
+        } else {
+            listaEmprestimos = EmprestimosDatabase.getInstance(this).getEmprestimoDao().getAllAscending();
+        }
 
         emprestimoAdapter = new EmprestimoAdapter(this,
                 listaEmprestimos);
@@ -169,19 +174,12 @@ public class EmprestimosActivity extends AppCompatActivity {
                         Bundle bundle = intent.getExtras();
 
                         if (bundle != null) {
-                            String itemEmprestado = bundle.getString(CadastroEmprestimoActivity.KEY_ITEM_EMPRESTADO);
-                            int emprestadoPara = bundle.getInt(CadastroEmprestimoActivity.KEY_EMPRESTADO_PARA);
-                            String prioridadeDevolucao = bundle.getString(CadastroEmprestimoActivity.KEY_PRIORIDADE_DEVOLUCAO);
-                            boolean ehFragil = bundle.getBoolean(CadastroEmprestimoActivity.KEY_EH_FRAGIL);
-                            boolean itemDevolvido = bundle.getBoolean(CadastroEmprestimoActivity.KEY_ITEM_DEVOLVIDO);
-                            String observacoes = bundle.getString(CadastroEmprestimoActivity.KEY_OBSERVACOES);
+                            long idEmprestimo = bundle.getLong(CadastroEmprestimoActivity.KEY_ID);
 
-                            Emprestimo emprestimo = new Emprestimo(itemEmprestado,
-                                    emprestadoPara,
-                                    PrioridadeDevolucao.valueOf(prioridadeDevolucao),
-                                    ehFragil,
-                                    itemDevolvido,
-                                    observacoes);
+                            Emprestimo emprestimo = EmprestimosDatabase
+                                    .getInstance(EmprestimosActivity.this)
+                                    .getEmprestimoDao()
+                                    .getById(idEmprestimo);
 
                             listaEmprestimos.add(emprestimo);
 
@@ -249,20 +247,14 @@ public class EmprestimosActivity extends AppCompatActivity {
                         Bundle bundle = intent.getExtras();
 
                         if (bundle != null) {
-                            String itemEmprestado = bundle.getString(CadastroEmprestimoActivity.KEY_ITEM_EMPRESTADO);
-                            int emprestadoPara = bundle.getInt(CadastroEmprestimoActivity.KEY_EMPRESTADO_PARA);
-                            String prioridadeDevolucao = bundle.getString(CadastroEmprestimoActivity.KEY_PRIORIDADE_DEVOLUCAO);
-                            boolean ehFragil = bundle.getBoolean(CadastroEmprestimoActivity.KEY_EH_FRAGIL);
-                            boolean itemDevolvido = bundle.getBoolean(CadastroEmprestimoActivity.KEY_ITEM_DEVOLVIDO);
-                            String observacoes = bundle.getString(CadastroEmprestimoActivity.KEY_OBSERVACOES);
+                            long idEmprestimo = bundle.getLong(CadastroEmprestimoActivity.KEY_ID);
 
-                            Emprestimo emprestimo = listaEmprestimos.get(posicaoSelecionada);
-                            emprestimo.setNomeItemEmprestado(itemEmprestado);
-                            emprestimo.setAmigo(emprestadoPara);
-                            emprestimo.setPrioridadeDevolucao(PrioridadeDevolucao.valueOf(prioridadeDevolucao));
-                            emprestimo.setFragil(ehFragil);
-                            emprestimo.setDevolvido(itemDevolvido);
-                            emprestimo.setObservacao(observacoes);
+                            Emprestimo emprestimoEditado = EmprestimosDatabase
+                                    .getInstance(EmprestimosActivity.this)
+                                    .getEmprestimoDao()
+                                    .getById(idEmprestimo);
+
+                            listaEmprestimos.set(posicaoSelecionada, emprestimoEditado);
 
                             definirOrdenacao();
                         }
@@ -284,12 +276,7 @@ public class EmprestimosActivity extends AppCompatActivity {
         Intent intent = new Intent(this, CadastroEmprestimoActivity.class);
 
         intent.putExtra(CadastroEmprestimoActivity.KEY_MODO, CadastroEmprestimoActivity.MODO_EDITAR);
-        intent.putExtra(CadastroEmprestimoActivity.KEY_ITEM_EMPRESTADO, emprestimo.getNomeItemEmprestado());
-        intent.putExtra(CadastroEmprestimoActivity.KEY_EMPRESTADO_PARA, emprestimo.getAmigo());
-        intent.putExtra(CadastroEmprestimoActivity.KEY_PRIORIDADE_DEVOLUCAO, emprestimo.getPrioridadeDevolucao().toString());
-        intent.putExtra(CadastroEmprestimoActivity.KEY_EH_FRAGIL, emprestimo.isFragil());
-        intent.putExtra(CadastroEmprestimoActivity.KEY_ITEM_DEVOLVIDO, emprestimo.isDevolvido());
-        intent.putExtra(CadastroEmprestimoActivity.KEY_OBSERVACOES, emprestimo.getObservacao());
+        intent.putExtra(CadastroEmprestimoActivity.KEY_ID, emprestimo.getId());
 
         launcherEditarEmprestimo.launch(intent);
     }
@@ -302,13 +289,22 @@ public class EmprestimosActivity extends AppCompatActivity {
 
     private void excluirEmprestimo() {
 
-        Emprestimo emprestimo = listaEmprestimos.get(posicaoSelecionada);
+        final Emprestimo emprestimo = listaEmprestimos.get(posicaoSelecionada);
 
         String mensagem = getString(R.string.confirmacao_exclusao_emprestimo, emprestimo.getNomeItemEmprestado().toUpperCase());
 
         DialogInterface.OnClickListener listenerSim = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
+
+                EmprestimosDatabase database = EmprestimosDatabase.getInstance(EmprestimosActivity.this);
+
+                if (database.getEmprestimoDao().delete(emprestimo) != 1) {
+                    UtilsAlert.mostrarAviso(EmprestimosActivity.this,
+                            R.string.erro_ao_excluir);
+                    return;
+                }
+
                 listaEmprestimos.remove(posicaoSelecionada);
                 emprestimoAdapter.notifyDataSetChanged();
                 actionMode.finish();

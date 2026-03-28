@@ -49,4 +49,7 @@
     <string name="confirmacao">Confirmation</string>
     <string name="confirmacao_exclusao_emprestimo">Do you want to delete?\n\"%1$s\"</string>
     <string name="deseja_voltar_padroes">Do you want do restore defaults?</string>
+    <string name="erro_ao_inserir">Error trying to save the item!</string>
+    <string name="erro_ao_atualizar">Error trying to update!</string>
+    <string name="erro_ao_excluir">Error trying to delete!</string>
 </resources>

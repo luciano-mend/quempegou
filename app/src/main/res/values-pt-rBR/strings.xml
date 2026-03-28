@@ -48,4 +48,7 @@
     <string name="confirmacao">Confirmação</string>
     <string name="confirmacao_exclusao_emprestimo">Deseja excluir?\n\"%1$s\"</string>
     <string name="deseja_voltar_padroes">Deseja restaurar os padrões?</string>
+    <string name="erro_ao_inserir">Erro ao salvar o item!</string>
+    <string name="erro_ao_atualizar">Erro ao tentar editar!</string>
+    <string name="erro_ao_excluir">Erro ao tentar excluir!</string>
 </resources>

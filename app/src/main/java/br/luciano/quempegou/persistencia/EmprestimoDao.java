@@ -31,4 +31,7 @@ public interface EmprestimoDao {
     @Query("SELECT * FROM Emprestimo ORDER BY nomeItemEmprestado DESC")
     List<Emprestimo> getAllDescending();
 
+    @Query("SELECT * FROM Emprestimo ORDER BY devolvido, nomeItemEmprestado ASC")
+    List<Emprestimo> getAllAscendingNaoDevolvidos();
+
 }
