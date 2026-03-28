@@ -44,7 +44,7 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/txvRotuloNomeAmigo"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txvValorItemEmprestado" />
 
     <TextView
@@ -69,6 +69,27 @@
         app:layout_constraintTop_toBottomOf="@+id/txvValorNomeAmigo" />
 
     <TextView
+        android:id="@+id/txvRotuloDataEmprestimo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/layout_data_emprestimo"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txvRotuloPrioridadeDevolucao" />
+
+    <TextView
+        android:id="@+id/txvValorDataEmprestimo"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/txvRotuloDataEmprestimo"
+        app:layout_constraintTop_toBottomOf="@+id/txvRotuloPrioridadeDevolucao" />
+
+    <TextView
         android:id="@+id/txvRotuloFragil"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -76,7 +97,7 @@
         android:layout_marginTop="8dp"
         android:text="@string/layout_item_fragil"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txvRotuloPrioridadeDevolucao" />
+        app:layout_constraintTop_toBottomOf="@+id/txvRotuloDataEmprestimo" />
 
     <TextView
         android:id="@+id/txvValorItemFragil"
@@ -87,7 +108,7 @@
         android:layout_marginEnd="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/txvRotuloFragil"
-        app:layout_constraintTop_toBottomOf="@+id/txvRotuloPrioridadeDevolucao" />
+        app:layout_constraintTop_toBottomOf="@+id/txvRotuloDataEmprestimo" />
 
     <TextView
         android:id="@+id/txvRotuloDevolucao"

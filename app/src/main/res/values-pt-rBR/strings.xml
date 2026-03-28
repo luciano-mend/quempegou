@@ -51,4 +51,8 @@
     <string name="erro_ao_inserir">Erro ao salvar o item!</string>
     <string name="erro_ao_atualizar">Erro ao tentar editar!</string>
     <string name="erro_ao_excluir">Erro ao tentar excluir!</string>
+    <string name="data_emprestimo">Data do empréstimo</string>
+    <string name="data_devolucao">Data de devolução</string>
+    <string name="layout_data_emprestimo">Data do empréstimo:</string>
+    <string name="layout_data_devolucao">Data de devolução:</string>
 </resources>

@@ -43,18 +43,21 @@ public class EmprestimoDaoTest {
 
     @Test
     public void deveInserirUmEmprestimoComSucesso() {
-        Emprestimo emprestimo = new Emprestimo("Livro de Java", 1, PrioridadeDevolucao.ALTA, false, false, "Devolver logo");
+        long agora = System.currentTimeMillis();
+        Emprestimo emprestimo = new Emprestimo("Livro de Java", 1, PrioridadeDevolucao.ALTA, false, false, "Devolver logo", agora, agora);
 
         long id = dao.insert(emprestimo);
         Emprestimo emprestimoSalvo = dao.getById(id);
 
         assertNotNull(emprestimoSalvo);
         assertEquals("Livro de Java", emprestimoSalvo.getNomeItemEmprestado());
+        assertEquals(agora, emprestimoSalvo.getDataEmprestimo());
     }
 
     @Test
     public void deveRemoverUmEmprestimoComSucesso() {
-        Emprestimo emprestimo = new Emprestimo("Furadeira", 1, PrioridadeDevolucao.BAIXA, false, false, "");
+        long agora = System.currentTimeMillis();
+        Emprestimo emprestimo = new Emprestimo("Furadeira", 1, PrioridadeDevolucao.BAIXA, false, false, "", agora, agora);
         long id = dao.insert(emprestimo);
         Emprestimo salvo = dao.getById(id);
 
@@ -66,8 +69,9 @@ public class EmprestimoDaoTest {
 
     @Test
     public void deveListarTodosOsEmprestimosEmOrdemAlfabetica() {
-        dao.insert(new Emprestimo("Calculadora", 1, PrioridadeDevolucao.BAIXA, false, false, ""));
-        dao.insert(new Emprestimo("Alicate", 2, PrioridadeDevolucao.BAIXA, true, false, ""));
+        long agora = System.currentTimeMillis();
+        dao.insert(new Emprestimo("Calculadora", 1, PrioridadeDevolucao.BAIXA, false, false, "", agora, agora));
+        dao.insert(new Emprestimo("Alicate", 2, PrioridadeDevolucao.BAIXA, true, false, "", agora, agora));
 
         List<Emprestimo> lista = dao.getAllAscending();
 
@@ -78,8 +82,9 @@ public class EmprestimoDaoTest {
 
     @Test
     public void deveListarTodosOsEmprestimosEmOrdemAlfabeticaInversa() {
-        dao.insert(new Emprestimo("Alicate", 1, PrioridadeDevolucao.BAIXA, false, false, ""));
-        dao.insert(new Emprestimo("Calculadora", 2, PrioridadeDevolucao.BAIXA, false, false, ""));
+        long agora = System.currentTimeMillis();
+        dao.insert(new Emprestimo("Alicate", 1, PrioridadeDevolucao.BAIXA, false, false, "", agora, agora));
+        dao.insert(new Emprestimo("Calculadora", 2, PrioridadeDevolucao.BAIXA, false, false, "", agora, agora));
 
         List<Emprestimo> lista = dao.getAllDescending();
 
@@ -89,8 +94,9 @@ public class EmprestimoDaoTest {
 
     @Test
     public void deveListarEmprestimosNaoDevolvidosPrimeiro() {
-        Emprestimo e1 = new Emprestimo("Zebra (Devolvido)", 1, PrioridadeDevolucao.BAIXA, false, true, "");
-        Emprestimo e2 = new Emprestimo("Abajur (Não Devolvido)", 2, PrioridadeDevolucao.BAIXA, false, false, "");
+        long agora = System.currentTimeMillis();
+        Emprestimo e1 = new Emprestimo("Zebra (Devolvido)", 1, PrioridadeDevolucao.BAIXA, false, true, "", agora, agora);
+        Emprestimo e2 = new Emprestimo("Abajur (Não Devolvido)", 2, PrioridadeDevolucao.BAIXA, false, false, "", agora, agora);
         dao.insert(e1);
         dao.insert(e2);
 
@@ -102,7 +108,8 @@ public class EmprestimoDaoTest {
 
     @Test
     public void deveAtualizarUmEmprestimoParaDevolvido() {
-        Emprestimo emprestimo = new Emprestimo("Furadeira", 3, PrioridadeDevolucao.ALTA, false, false, "");
+        long agora = System.currentTimeMillis();
+        Emprestimo emprestimo = new Emprestimo("Furadeira", 3, PrioridadeDevolucao.ALTA, false, false, "", agora, agora);
         long id = dao.insert(emprestimo);
         Emprestimo paraAtualizar = dao.getById(id);
         paraAtualizar.setDevolvido(true);

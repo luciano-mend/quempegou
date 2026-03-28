@@ -2,6 +2,7 @@ package br.luciano.quempegou;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.format.DateFormat;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.AdapterView;
@@ -15,6 +16,10 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.material.datepicker.MaterialDatePicker;
+
+import java.util.Date;
 
 import br.luciano.quempegou.models.PrioridadeDevolucao;
 import br.luciano.quempegou.models.Emprestimo;
@@ -30,7 +35,7 @@ public class CadastroEmprestimoActivity extends AppCompatActivity {
     public static final int MODO_EDITAR = 1;
 
 
-    private EditText edtItemEmprestado, edtObservacoes;
+    private EditText edtItemEmprestado, edtObservacoes, edtDataEmprestimo, edtDataDevolucao;
     private Spinner spnAmigos;
     private CheckBox chkFragil, chkDevolucao;
     private RadioGroup rgbPrioridadeDevolucao;
@@ -39,6 +44,8 @@ public class CadastroEmprestimoActivity extends AppCompatActivity {
 
     private int modo;
     private Emprestimo emprestimoOriginal;
+    private long dataEmprestimoEmMillis;
+    private Long dataDevolucaoEmMillis;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +60,28 @@ public class CadastroEmprestimoActivity extends AppCompatActivity {
         chkDevolucao = findViewById(R.id.chkDevolucao);
         rdbBaixa = findViewById(R.id.rdbBaixa);
         rdbAlta = findViewById(R.id.rdbAlta);
+        edtDataEmprestimo = findViewById(R.id.edtDataEmprestimo);
+        edtDataDevolucao = findViewById(R.id.edtDataDevolucao);
+
+        edtDataEmprestimo.setOnClickListener(v -> mostrarDatePicker(true));
+        edtDataDevolucao.setOnClickListener(v -> {
+            if (chkDevolucao.isChecked()) {
+                mostrarDatePicker(false);
+            }
+        });
+
+        chkDevolucao.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            edtDataDevolucao.setEnabled(isChecked);
+            if (isChecked) {
+                if (dataDevolucaoEmMillis == null) {
+                    dataDevolucaoEmMillis = System.currentTimeMillis();
+                }
+                exibirData(edtDataDevolucao, dataDevolucaoEmMillis);
+            } else {
+                dataDevolucaoEmMillis = null;
+                edtDataDevolucao.setText(null);
+            }
+        });
 
         populaSpinner();
 
@@ -65,6 +94,11 @@ public class CadastroEmprestimoActivity extends AppCompatActivity {
 
             if (modo == MODO_NOVO) {
                 setTitle(getString(R.string.novo_emprestimo));
+                dataEmprestimoEmMillis = System.currentTimeMillis();
+                dataDevolucaoEmMillis = null;
+                exibirData(edtDataEmprestimo, dataEmprestimoEmMillis);
+                edtDataDevolucao.setEnabled(false);
+                edtDataDevolucao.setText(null);
             } else {
                 setTitle(getString(R.string.editar_emprestimo));
 
@@ -94,11 +128,53 @@ public class CadastroEmprestimoActivity extends AppCompatActivity {
                 }
                 edtObservacoes.setText(emprestimoOriginal.getObservacao());
 
+                dataEmprestimoEmMillis = emprestimoOriginal.getDataEmprestimo();
+                dataDevolucaoEmMillis = emprestimoOriginal.getDataDevolucao();
+                
+                exibirData(edtDataEmprestimo, dataEmprestimoEmMillis);
+                
+                if (emprestimoOriginal.isDevolvido()) {
+                    edtDataDevolucao.setEnabled(true);
+                    exibirData(edtDataDevolucao, dataDevolucaoEmMillis);
+                } else {
+                    edtDataDevolucao.setEnabled(false);
+                    edtDataDevolucao.setText(null);
+                }
+
                 edtItemEmprestado.requestFocus();
                 edtItemEmprestado.setSelection(edtItemEmprestado.getText().length());
             }
         }
 
+    }
+
+    private void mostrarDatePicker(boolean ehEmprestimo) {
+        int tituloId = ehEmprestimo ? R.string.data_emprestimo : R.string.data_devolucao;
+        MaterialDatePicker<Long> seletorData = MaterialDatePicker.Builder.datePicker()
+                .setTitleText(tituloId)
+                .setSelection(ehEmprestimo ? dataEmprestimoEmMillis : (dataDevolucaoEmMillis != null ? dataDevolucaoEmMillis : MaterialDatePicker.todayInUtcMilliseconds()))
+                .build();
+
+        seletorData.addOnPositiveButtonClickListener(selecao -> {
+            if (ehEmprestimo) {
+                dataEmprestimoEmMillis = selecao;
+                exibirData(edtDataEmprestimo, dataEmprestimoEmMillis);
+            } else {
+                dataDevolucaoEmMillis = selecao;
+                exibirData(edtDataDevolucao, dataDevolucaoEmMillis);
+            }
+        });
+
+        seletorData.show(getSupportFragmentManager(), "DATE_PICKER");
+    }
+
+    private void exibirData(EditText editText, Long millis) {
+        if (millis == null) {
+            editText.setText(null);
+        } else {
+            java.text.DateFormat formatador = DateFormat.getDateFormat(this);
+            editText.setText(formatador.format(new Date(millis)));
+        }
     }
 
     private void populaSpinner() {
@@ -121,6 +197,12 @@ public class CadastroEmprestimoActivity extends AppCompatActivity {
         rgbPrioridadeDevolucao.clearCheck();
         chkFragil.setChecked(false);
         chkDevolucao.setChecked(false);
+        
+        dataEmprestimoEmMillis = System.currentTimeMillis();
+        dataDevolucaoEmMillis = null;
+        exibirData(edtDataEmprestimo, dataEmprestimoEmMillis);
+        edtDataDevolucao.setText(null);
+        edtDataDevolucao.setEnabled(false);
 
         Toast.makeText(this,
                 R.string.as_entradas_foram_apagadas,
@@ -169,7 +251,8 @@ public class CadastroEmprestimoActivity extends AppCompatActivity {
 
         Emprestimo emprestimo = new Emprestimo(itemEmprestado, emprestadoPara,
                                                prioridadeDevolucao, ehFragil,
-                                               itemDevolvido, observacoes);
+                                               itemDevolvido, observacoes,
+                                               dataEmprestimoEmMillis, dataDevolucaoEmMillis);
 
         if (emprestimo.equals(emprestimoOriginal)) {
             //não houve alteração
