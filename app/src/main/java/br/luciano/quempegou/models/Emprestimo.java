@@ -6,6 +6,7 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 import java.util.Comparator;
+import java.util.Objects;
 
 @Entity
 public class Emprestimo {
@@ -104,6 +105,29 @@ public class Emprestimo {
 
     public void setObservacao(String observacao) {
         this.observacao = observacao;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+
+        if (o == null || getClass() != o.getClass())
+            return false;
+
+        Emprestimo emprestimo = (Emprestimo) o;
+
+        return amigo == emprestimo.amigo &&
+                fragil == emprestimo.fragil &&
+                devolvido == emprestimo.devolvido &&
+                nomeItemEmprestado.equalsIgnoreCase(emprestimo.nomeItemEmprestado) &&
+                prioridadeDevolucao == emprestimo.prioridadeDevolucao &&
+                observacao.equalsIgnoreCase(emprestimo.observacao);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(nomeItemEmprestado, amigo, prioridadeDevolucao, fragil, devolvido, observacao);
     }
 
     @Override

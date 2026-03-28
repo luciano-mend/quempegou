@@ -18,17 +18,13 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import br.luciano.quempegou.models.PrioridadeDevolucao;
 import br.luciano.quempegou.models.Emprestimo;
+import br.luciano.quempegou.persistencia.EmprestimosDatabase;
 import br.luciano.quempegou.utils.UtilsAlert;
 
 public class CadastroEmprestimoActivity extends AppCompatActivity {
 
-    public static final String KEY_ITEM_EMPRESTADO = "KEY_ITEM_EMPRESTADO";
-    public static final String KEY_EMPRESTADO_PARA = "KEY_EMPRESTADO_PARA";
-    public static final String KEY_PRIORIDADE_DEVOLUCAO = "KEY_PRIORIDADE_DEVOLUCAO";
-    public static final String KEY_EH_FRAGIL = "KEY_EH_FRAGIL";
-    public static final String KEY_ITEM_DEVOLVIDO = "KEY_ITEM_DEVOLVIDO";
-    public static final String KEY_OBSERVACOES = "KEY_OBSERVACOES";
     public static final String KEY_MODO = "MODO";
+    public static final String KEY_ID = "ID";
 
     public static final int MODO_NOVO = 0;
     public static final int MODO_EDITAR = 1;
@@ -72,27 +68,15 @@ public class CadastroEmprestimoActivity extends AppCompatActivity {
             } else {
                 setTitle(getString(R.string.editar_emprestimo));
 
-                String itemEmprestado = bundle.getString(CadastroEmprestimoActivity.KEY_ITEM_EMPRESTADO);
-                int emprestadoPara = bundle.getInt(CadastroEmprestimoActivity.KEY_EMPRESTADO_PARA);
-                String prioridadeDevolucaoTexto = bundle.getString(CadastroEmprestimoActivity.KEY_PRIORIDADE_DEVOLUCAO);
-                boolean ehFragil = bundle.getBoolean(CadastroEmprestimoActivity.KEY_EH_FRAGIL);
-                boolean itemDevolvido = bundle.getBoolean(CadastroEmprestimoActivity.KEY_ITEM_DEVOLVIDO);
-                String observacoes = bundle.getString(CadastroEmprestimoActivity.KEY_OBSERVACOES);
+                long idEmprestimo = bundle.getLong(KEY_ID);
 
-                PrioridadeDevolucao prioridadeDevolucao = PrioridadeDevolucao.valueOf(prioridadeDevolucaoTexto);
+                EmprestimosDatabase database = EmprestimosDatabase.getInstance(this);
+                emprestimoOriginal = database.getEmprestimoDao().getById(idEmprestimo);
 
-                emprestimoOriginal = new Emprestimo(
-                        itemEmprestado,
-                        emprestadoPara,
-                        prioridadeDevolucao,
-                        ehFragil,
-                        itemDevolvido,
-                        observacoes);
+                edtItemEmprestado.setText(emprestimoOriginal.getNomeItemEmprestado());
+                spnAmigos.setSelection(emprestimoOriginal.getAmigo());
 
-                edtItemEmprestado.setText(itemEmprestado);
-                spnAmigos.setSelection(emprestadoPara);
-
-                switch (prioridadeDevolucao) {
+                switch (emprestimoOriginal.getPrioridadeDevolucao()) {
                     case BAIXA:
                         rdbBaixa.setChecked(true);
                         break;
@@ -101,14 +85,17 @@ public class CadastroEmprestimoActivity extends AppCompatActivity {
                         break;
                 }
 
-                if (ehFragil) {
+                if (emprestimoOriginal.isFragil()) {
                     chkFragil.setChecked(true);
                 }
 
-                if (itemDevolvido) {
+                if (emprestimoOriginal.isDevolvido()) {
                     chkDevolucao.setChecked(true);
                 }
-                edtObservacoes.setText(observacoes);
+                edtObservacoes.setText(emprestimoOriginal.getObservacao());
+
+                edtItemEmprestado.requestFocus();
+                edtItemEmprestado.setSelection(edtItemEmprestado.getText().length());
             }
         }
 
@@ -180,14 +167,11 @@ public class CadastroEmprestimoActivity extends AppCompatActivity {
 
         String observacoes = edtObservacoes.getText().toString().trim();
 
-        if (modo == MODO_EDITAR &&
-                itemEmprestado.equals(emprestimoOriginal.getNomeItemEmprestado()) &&
-                emprestadoPara == emprestimoOriginal.getAmigo() &&
-                prioridadeDevolucao == emprestimoOriginal.getPrioridadeDevolucao() &&
-                ehFragil == emprestimoOriginal.isFragil() &&
-                itemDevolvido == emprestimoOriginal.isDevolvido() &&
-                observacoes.equals(emprestimoOriginal.getObservacao())) {
+        Emprestimo emprestimo = new Emprestimo(itemEmprestado, emprestadoPara,
+                                               prioridadeDevolucao, ehFragil,
+                                               itemDevolvido, observacoes);
 
+        if (emprestimo.equals(emprestimoOriginal)) {
             //não houve alteração
             setResult(CadastroEmprestimoActivity.RESULT_CANCELED);
             finish();
@@ -195,12 +179,30 @@ public class CadastroEmprestimoActivity extends AppCompatActivity {
         }
 
         Intent intentResposta = new Intent();
-        intentResposta.putExtra(KEY_ITEM_EMPRESTADO, itemEmprestado);
-        intentResposta.putExtra(KEY_EMPRESTADO_PARA, emprestadoPara);
-        intentResposta.putExtra(KEY_PRIORIDADE_DEVOLUCAO, prioridadeDevolucao.toString());
-        intentResposta.putExtra(KEY_EH_FRAGIL, ehFragil);
-        intentResposta.putExtra(KEY_ITEM_DEVOLVIDO, itemDevolvido);
-        intentResposta.putExtra(KEY_OBSERVACOES, observacoes);
+
+        EmprestimosDatabase database = EmprestimosDatabase.getInstance(this);
+
+        if (modo == MODO_NOVO) {
+            long novoId = database.getEmprestimoDao().insert(emprestimo);
+
+            if (novoId <= 0) {
+                UtilsAlert.mostrarAviso(this,
+                        R.string.erro_ao_inserir);
+                return;
+            }
+
+            emprestimo.setId(novoId);
+
+        } else {
+            emprestimo.setId(emprestimoOriginal.getId());
+
+            if (database.getEmprestimoDao().update(emprestimo) != 1) {
+                UtilsAlert.mostrarAviso(this,
+                        R.string.erro_ao_atualizar);
+                return;
+            }
+        }
+        intentResposta.putExtra(KEY_ID, emprestimo.getId());
 
         setResult(CadastroEmprestimoActivity.RESULT_OK, intentResposta);
 
