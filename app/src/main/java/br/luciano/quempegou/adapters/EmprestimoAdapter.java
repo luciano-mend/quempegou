@@ -1,12 +1,14 @@
 package br.luciano.quempegou.adapters;
 
 import android.content.Context;
+import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import java.util.Date;
 import java.util.List;
 
 import br.luciano.quempegou.R;
@@ -22,6 +24,7 @@ public class EmprestimoAdapter extends BaseAdapter {
         public TextView txvValorItemEmprestado;
         public TextView txvValorNomeAmigo;
         public TextView txvValorPrioridadeDevolucao;
+        public TextView txvValorDataEmprestimo;
         public TextView txvValorItemFragil;
         public TextView tvxValorDevolucao;
         public TextView txvValorObservacoes;
@@ -64,6 +67,7 @@ public class EmprestimoAdapter extends BaseAdapter {
             holder.txvValorItemEmprestado = view.findViewById(R.id.txvValorItemEmprestado);
             holder.txvValorNomeAmigo = view.findViewById(R.id.txvValorNomeAmigo);
             holder.txvValorPrioridadeDevolucao = view.findViewById(R.id.txvValorPrioridadeDevolucao);
+            holder.txvValorDataEmprestimo = view.findViewById(R.id.txvValorDataEmprestimo);
             holder.txvValorItemFragil = view.findViewById(R.id.txvValorItemFragil);
             holder.tvxValorDevolucao = view.findViewById(R.id.tvxValorDevolucao);
             holder.txvValorObservacoes = view.findViewById(R.id.txvValorObservacoes);
@@ -90,6 +94,9 @@ public class EmprestimoAdapter extends BaseAdapter {
                 holder.txvValorPrioridadeDevolucao.setText(R.string.prioridade_alta);
                 break;
         }
+
+        java.text.DateFormat format = DateFormat.getDateFormat(context);
+        holder.txvValorDataEmprestimo.setText(format.format(new Date(emprestimo.getDataEmprestimo())));
 
         holder.txvValorItemFragil.setText(emprestimo.isFragil() ? context.getString(R.string.item_fragil_sim) : context.getString(R.string.item_fragil_nao));
         holder.tvxValorDevolucao.setText(emprestimo.isDevolvido() ? context.getString(R.string.item_devolvido_sim) : context.getString(R.string.item_devolvido_nao));

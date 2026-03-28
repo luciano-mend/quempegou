@@ -41,14 +41,18 @@ public class Emprestimo {
     private boolean fragil;
     private boolean devolvido;
     private String observacao;
+    private long dataEmprestimo;
+    private Long dataDevolucao;
 
-    public Emprestimo(String nomeItemEmprestado, int amigo, PrioridadeDevolucao prioridadeDevolucao, boolean fragil, boolean devolvido, String observacao) {
+    public Emprestimo(String nomeItemEmprestado, int amigo, PrioridadeDevolucao prioridadeDevolucao, boolean fragil, boolean devolvido, String observacao, long dataEmprestimo, Long dataDevolucao) {
         this.nomeItemEmprestado = nomeItemEmprestado;
         this.amigo = amigo;
         this.prioridadeDevolucao = prioridadeDevolucao;
         this.fragil = fragil;
         this.devolvido = devolvido;
         this.observacao = observacao;
+        this.dataEmprestimo = dataEmprestimo;
+        this.dataDevolucao = dataDevolucao;
     }
 
     public Long getId() {
@@ -107,6 +111,22 @@ public class Emprestimo {
         this.observacao = observacao;
     }
 
+    public long getDataEmprestimo() {
+        return dataEmprestimo;
+    }
+
+    public void setDataEmprestimo(long dataEmprestimo) {
+        this.dataEmprestimo = dataEmprestimo;
+    }
+
+    public Long getDataDevolucao() {
+        return dataDevolucao;
+    }
+
+    public void setDataDevolucao(Long dataDevolucao) {
+        this.dataDevolucao = dataDevolucao;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o)
@@ -120,6 +140,8 @@ public class Emprestimo {
         return amigo == emprestimo.amigo &&
                 fragil == emprestimo.fragil &&
                 devolvido == emprestimo.devolvido &&
+                dataEmprestimo == emprestimo.dataEmprestimo &&
+                Objects.equals(dataDevolucao, emprestimo.dataDevolucao) &&
                 nomeItemEmprestado.equalsIgnoreCase(emprestimo.nomeItemEmprestado) &&
                 prioridadeDevolucao == emprestimo.prioridadeDevolucao &&
                 observacao.equalsIgnoreCase(emprestimo.observacao);
@@ -127,7 +149,7 @@ public class Emprestimo {
 
     @Override
     public int hashCode() {
-        return Objects.hash(nomeItemEmprestado, amigo, prioridadeDevolucao, fragil, devolvido, observacao);
+        return Objects.hash(nomeItemEmprestado, amigo, prioridadeDevolucao, fragil, devolvido, observacao, dataEmprestimo, dataDevolucao);
     }
 
     @Override
@@ -136,6 +158,8 @@ public class Emprestimo {
                 amigo + "\n" +
                 prioridadeDevolucao + "\n" +
                 fragil + "\n" +
-                observacao;
+                observacao + "\n" +
+                dataEmprestimo + "\n" +
+                dataDevolucao;
     }
 }

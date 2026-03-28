@@ -52,4 +52,8 @@
     <string name="erro_ao_inserir">Error trying to save the item!</string>
     <string name="erro_ao_atualizar">Error trying to update!</string>
     <string name="erro_ao_excluir">Error trying to delete!</string>
+    <string name="data_emprestimo">Borrowed in</string>
+    <string name="data_devolucao">Return date</string>
+    <string name="layout_data_emprestimo">Borrowed in:</string>
+    <string name="layout_data_devolucao">Return date:</string>
 </resources>

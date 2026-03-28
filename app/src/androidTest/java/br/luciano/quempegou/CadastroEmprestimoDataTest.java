@@ -1,19 +1,14 @@
 package br.luciano.quempegou;
 
-import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
-import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.scrollTo;
-import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.matcher.ViewMatchers.isChecked;
+import static androidx.test.espresso.matcher.ViewMatchers.isEnabled;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static org.hamcrest.Matchers.allOf;
-import static org.hamcrest.Matchers.instanceOf;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
 
 import android.content.Intent;
 
@@ -25,72 +20,70 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 @RunWith(AndroidJUnit4.class)
-public class CadastroEmprestimoActivityTest {
+public class CadastroEmprestimoDataTest {
 
     @Test
-    public void deveMostrarErroAoTentarSalvarSemNomeDoItem() {
+    public void deveIniciarComDataEmprestimoPreenchidaEDevolucaoVazia() {
         Intent intent = new Intent(ApplicationProvider.getApplicationContext(), CadastroEmprestimoActivity.class);
         intent.putExtra(CadastroEmprestimoActivity.KEY_MODO, CadastroEmprestimoActivity.MODO_NOVO);
         
         try (ActivityScenario<CadastroEmprestimoActivity> scenario = ActivityScenario.launch(intent)) {
-            onView(withId(R.id.mniSalvar)).perform(click());
-            onView(withText(R.string.campo_item_emprestado_nao_preenchido)).check(matches(isDisplayed()));
+            onView(withId(R.id.edtDataEmprestimo)).check(matches(not(withText(""))));
+            onView(withId(R.id.edtDataDevolucao)).check(matches(withText("")));
+            onView(withId(R.id.edtDataDevolucao)).check(matches(not(isEnabled())));
         }
     }
 
     @Test
-    public void deveMostrarErroAoTentarSalvarSemPrioridade() {
+    public void deveHabilitarEPreencherDataAoMarcarDevolvido() {
         Intent intent = new Intent(ApplicationProvider.getApplicationContext(), CadastroEmprestimoActivity.class);
         intent.putExtra(CadastroEmprestimoActivity.KEY_MODO, CadastroEmprestimoActivity.MODO_NOVO);
         
         try (ActivityScenario<CadastroEmprestimoActivity> scenario = ActivityScenario.launch(intent)) {
-            onView(withId(R.id.edtItemEmprestado)).perform(typeText("Furadeira"), closeSoftKeyboard());
-
-            onView(withId(R.id.mniSalvar)).perform(click());
-
-            onView(withText(R.string.selecione_uma_prioridade_de_devolucao)).check(matches(isDisplayed()));
+            onView(withId(R.id.chkDevolucao)).perform(scrollTo(), click());
+            
+            onView(withId(R.id.edtDataDevolucao)).check(matches(isEnabled()));
+            onView(withId(R.id.edtDataDevolucao)).check(matches(not(withText(""))));
         }
     }
 
     @Test
-    public void devePermitirSelecionarAmigoNoSpinner() {
+    public void deveAbrirDatePickerAoClicarNoCampoDataEmprestimo() {
         Intent intent = new Intent(ApplicationProvider.getApplicationContext(), CadastroEmprestimoActivity.class);
         intent.putExtra(CadastroEmprestimoActivity.KEY_MODO, CadastroEmprestimoActivity.MODO_NOVO);
         
         try (ActivityScenario<CadastroEmprestimoActivity> scenario = ActivityScenario.launch(intent)) {
-            onView(withId(R.id.spnAmigos)).perform(scrollTo(), click());
-
-            onData(allOf(is(instanceOf(String.class)))).atPosition(1).perform(click());
-
-            onView(withId(R.id.spnAmigos)).check(matches(isDisplayed()));
+            onView(withId(R.id.edtDataEmprestimo)).perform(scrollTo(), click());
+            
+            onView(withText(R.string.data_emprestimo)).check(matches(isDisplayed()));
         }
     }
 
     @Test
-    public void deveMarcarOpcoesDeCheckbox() {
+    public void deveAbrirDatePickerAoClicarNoCampoDataDevolucaoHabilitado() {
         Intent intent = new Intent(ApplicationProvider.getApplicationContext(), CadastroEmprestimoActivity.class);
         intent.putExtra(CadastroEmprestimoActivity.KEY_MODO, CadastroEmprestimoActivity.MODO_NOVO);
         
         try (ActivityScenario<CadastroEmprestimoActivity> scenario = ActivityScenario.launch(intent)) {
-            onView(withId(android.R.id.content)).perform(closeSoftKeyboard());
+            onView(withId(R.id.chkDevolucao)).perform(scrollTo(), click());
+            
+            onView(withId(R.id.edtDataDevolucao)).perform(scrollTo(), click());
+            
+            onView(withText(R.string.data_devolucao)).check(matches(isDisplayed()));
+        }
+    }
 
-            onView(withId(R.id.chkFragil)).perform(scrollTo(), click());
+    @Test
+    public void deveLimparDataDevolucaoAoDesmarcarCheckbox() {
+        Intent intent = new Intent(ApplicationProvider.getApplicationContext(), CadastroEmprestimoActivity.class);
+        intent.putExtra(CadastroEmprestimoActivity.KEY_MODO, CadastroEmprestimoActivity.MODO_NOVO);
+        
+        try (ActivityScenario<CadastroEmprestimoActivity> scenario = ActivityScenario.launch(intent)) {
+            onView(withId(R.id.chkDevolucao)).perform(scrollTo(), click());
             onView(withId(R.id.chkDevolucao)).perform(scrollTo(), click());
 
-            onView(withId(R.id.chkFragil)).check(matches(isChecked()));
-            onView(withId(R.id.chkDevolucao)).check(matches(isChecked()));
-        }
-    }
-
-    @Test
-    public void deveLimparCamposAoClicarNoMenuLimpar() {
-        Intent intent = new Intent(ApplicationProvider.getApplicationContext(), CadastroEmprestimoActivity.class);
-        intent.putExtra(CadastroEmprestimoActivity.KEY_MODO, CadastroEmprestimoActivity.MODO_NOVO);
-        
-        try (ActivityScenario<CadastroEmprestimoActivity> scenario = ActivityScenario.launch(intent)) {
-            onView(withId(R.id.edtItemEmprestado)).perform(typeText("Furadeira"), closeSoftKeyboard());
-            onView(withId(R.id.mniLimpar)).perform(click());
-            onView(withId(R.id.edtItemEmprestado)).check(matches(withText("")));
+            onView(withId(R.id.edtDataDevolucao)).check(matches(withText("")));
+            onView(withId(R.id.edtDataDevolucao)).check(matches(not(isEnabled())));
         }
     }
 }
