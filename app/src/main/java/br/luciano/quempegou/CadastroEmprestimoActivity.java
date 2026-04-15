@@ -8,7 +8,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -19,8 +18,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -31,8 +28,8 @@ import java.util.Date;
 import java.util.List;
 
 import br.luciano.quempegou.models.Amigo;
-import br.luciano.quempegou.models.PrioridadeDevolucao;
 import br.luciano.quempegou.models.Emprestimo;
+import br.luciano.quempegou.models.PrioridadeDevolucao;
 import br.luciano.quempegou.persistencia.EmprestimosDatabase;
 import br.luciano.quempegou.utils.UtilsAlert;
 
