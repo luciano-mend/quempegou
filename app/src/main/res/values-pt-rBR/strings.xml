@@ -55,4 +55,7 @@
     <string name="data_devolucao">Data de devolução</string>
     <string name="layout_data_emprestimo">Data do empréstimo:</string>
     <string name="layout_data_devolucao">Data de devolução:</string>
+    <string name="incluir_amigos">Incluir amigos</string>
+    <string name="amigos">Amigos</string>
+    <string name="cadastro_amigo">Cadastro de amigos</string>
 </resources>

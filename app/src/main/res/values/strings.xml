@@ -56,4 +56,7 @@
     <string name="data_devolucao">Return date</string>
     <string name="layout_data_emprestimo">Borrowed in:</string>
     <string name="layout_data_devolucao">Return date:</string>
+    <string name="incluir_amigos">Add Friends</string>
+    <string name="amigos">Friends</string>
+    <string name="cadastro_amigo">Friend registration</string>
 </resources>

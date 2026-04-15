@@ -29,6 +29,14 @@
             android:name=".CadastroEmprestimoActivity"
             android:exported="false"
             android:parentActivityName=".EmprestimosActivity"/>
+        <activity
+            android:name=".CadastroAmigoActivity"
+            android:exported="false"
+            android:parentActivityName=".CadastroEmprestimoActivity"/>
+        <activity
+            android:name=".AmigosActivity"
+            android:exported="false"
+            android:parentActivityName=".CadastroEmprestimoActivity"/>
     </application>
 
 </manifest>

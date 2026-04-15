@@ -7,6 +7,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.RadioButton;
@@ -40,6 +41,7 @@ public class CadastroEmprestimoActivity extends AppCompatActivity {
     private CheckBox chkFragil, chkDevolucao;
     private RadioGroup rgbPrioridadeDevolucao;
     private RadioButton rdbBaixa, rdbAlta;
+    private Button btnIncluirAmigos, btnAmigos;
 
 
     private int modo;
@@ -62,6 +64,8 @@ public class CadastroEmprestimoActivity extends AppCompatActivity {
         rdbAlta = findViewById(R.id.rdbAlta);
         edtDataEmprestimo = findViewById(R.id.edtDataEmprestimo);
         edtDataDevolucao = findViewById(R.id.edtDataDevolucao);
+        btnIncluirAmigos = findViewById(R.id.btnIncluirAmigos);
+        btnAmigos = findViewById(R.id.btnAmigos);
 
         edtDataEmprestimo.setOnClickListener(v -> mostrarDatePicker(true));
         edtDataDevolucao.setOnClickListener(v -> {
@@ -81,6 +85,16 @@ public class CadastroEmprestimoActivity extends AppCompatActivity {
                 dataDevolucaoEmMillis = null;
                 edtDataDevolucao.setText(null);
             }
+        });
+
+        btnIncluirAmigos.setOnClickListener(v -> {
+            Intent intent = new Intent(this, CadastroAmigoActivity.class);
+            startActivity(intent);
+        });
+
+        btnAmigos.setOnClickListener(v -> {
+            Intent intent = new Intent(this, AmigosActivity.class);
+            startActivity(intent);
         });
 
         populaSpinner();

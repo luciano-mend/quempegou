@@ -58,9 +58,37 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:spinnerMode="dialog"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/btnIncluirAmigos"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textViewParaQuem" />
+
+        <Button
+            android:id="@+id/btnIncluirAmigos"
+            style="?attr/materialButtonOutlinedStyle"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginEnd="4dp"
+            android:contentDescription="@string/incluir_amigos"
+            app:icon="@android:drawable/ic_input_add"
+            app:iconGravity="start"
+            app:iconPadding="0dp"
+            app:layout_constraintBottom_toBottomOf="@+id/spnAmigos"
+            app:layout_constraintEnd_toStartOf="@+id/btnAmigos"
+            app:layout_constraintTop_toTopOf="@+id/spnAmigos" />
+
+        <Button
+            android:id="@+id/btnAmigos"
+            style="?attr/materialButtonOutlinedStyle"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginEnd="8dp"
+            android:contentDescription="@string/amigos"
+            app:icon="@android:drawable/ic_menu_myplaces"
+            app:iconGravity="start"
+            app:iconPadding="0dp"
+            app:layout_constraintBottom_toBottomOf="@+id/btnIncluirAmigos"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/btnIncluirAmigos" />
 
         <TextView
             android:id="@+id/textViewPrioridade"
