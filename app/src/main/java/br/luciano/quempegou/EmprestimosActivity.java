@@ -22,11 +22,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.ActionMode;
 import androidx.core.content.ContextCompat;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import br.luciano.quempegou.adapters.EmprestimoAdapter;
-import br.luciano.quempegou.models.PrioridadeDevolucao;
+import br.luciano.quempegou.models.Amigo;
 import br.luciano.quempegou.models.Emprestimo;
 import br.luciano.quempegou.persistencia.EmprestimosDatabase;
 import br.luciano.quempegou.utils.UtilsAlert;
@@ -144,14 +145,23 @@ public class EmprestimosActivity extends AppCompatActivity {
 
     private void popularEmprestimos() {
 
+        EmprestimosDatabase database = EmprestimosDatabase.getInstance(this);
+
         if (ordenacaoNaoDevolvidos) {
-            listaEmprestimos = EmprestimosDatabase.getInstance(this).getEmprestimoDao().getAllAscendingNaoDevolvidos();
+            listaEmprestimos = database.getEmprestimoDao().getAllAscendingNaoDevolvidos();
         } else {
-            listaEmprestimos = EmprestimosDatabase.getInstance(this).getEmprestimoDao().getAllAscending();
+            listaEmprestimos = database.getEmprestimoDao().getAllAscending();
+        }
+
+        // Criar um mapa de ID -> Nome de amigos para o adapter exibir corretamente
+        List<Amigo> todosAmigos = database.getAmigoDao().getAllAscending();
+        Map<Long, String> mapaAmigos = new HashMap<>();
+        for (Amigo a : todosAmigos) {
+            mapaAmigos.put(a.getId(), a.getNome());
         }
 
         emprestimoAdapter = new EmprestimoAdapter(this,
-                listaEmprestimos);
+                listaEmprestimos, mapaAmigos);
 
         lsvEmprestimos.setAdapter(emprestimoAdapter);
     }
@@ -169,22 +179,7 @@ public class EmprestimosActivity extends AppCompatActivity {
                 public void onActivityResult(ActivityResult result) {
 
                     if (result.getResultCode() == RESULT_OK) {
-                        Intent intent = result.getData();
-
-                        Bundle bundle = intent.getExtras();
-
-                        if (bundle != null) {
-                            long idEmprestimo = bundle.getLong(CadastroEmprestimoActivity.KEY_ID);
-
-                            Emprestimo emprestimo = EmprestimosDatabase
-                                    .getInstance(EmprestimosActivity.this)
-                                    .getEmprestimoDao()
-                                    .getById(idEmprestimo);
-
-                            listaEmprestimos.add(emprestimo);
-
-                            definirOrdenacao();
-                        }
+                        popularEmprestimos();
                     }
                 }
             });
@@ -222,7 +217,7 @@ public class EmprestimosActivity extends AppCompatActivity {
                 item.setChecked(valor);
 
                 if (!listaEmprestimos.isEmpty()) {
-                    definirOrdenacao();
+                    popularEmprestimos();
                 }
 
                 return true;
@@ -242,23 +237,7 @@ public class EmprestimosActivity extends AppCompatActivity {
                 public void onActivityResult(ActivityResult result) {
 
                     if (result.getResultCode() == RESULT_OK) {
-                        Intent intent = result.getData();
-
-                        Bundle bundle = intent.getExtras();
-
-                        if (bundle != null) {
-                            long idEmprestimo = bundle.getLong(CadastroEmprestimoActivity.KEY_ID);
-
-                            Emprestimo emprestimoEditado = EmprestimosDatabase
-                                    .getInstance(EmprestimosActivity.this)
-                                    .getEmprestimoDao()
-                                    .getById(idEmprestimo);
-
-                            listaEmprestimos.set(posicaoSelecionada, emprestimoEditado);
-
-                            definirOrdenacao();
-                        }
-
+                        popularEmprestimos();
                     }
 
                     posicaoSelecionada = -1;
@@ -330,23 +309,13 @@ public class EmprestimosActivity extends AppCompatActivity {
         ordenacaoNaoDevolvidos = novoValor;
     }
 
-    private void definirOrdenacao() {
-        if (ordenacaoNaoDevolvidos) {
-            listaEmprestimos.sort(Emprestimo.ordenacaoNaoDevolvidos);
-        } else {
-            listaEmprestimos.sort(Emprestimo.ordenacaoCrescente);
-        }
-
-        emprestimoAdapter.notifyDataSetChanged();
-    }
-
     private void confirmaRestaurarPadroes() {
         DialogInterface.OnClickListener listenerSim = new DialogInterface.OnClickListener() {
 
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 restaurarPadroes();
-                definirOrdenacao();
+                popularEmprestimos();
 
                 Toast.makeText(EmprestimosActivity.this,
                         getString(R.string.configuracoes_padroes_restauradas),

@@ -28,6 +28,7 @@
         <activity
             android:name=".CadastroEmprestimoActivity"
             android:exported="false"
+            android:launchMode="singleTop"
             android:parentActivityName=".EmprestimosActivity"/>
         <activity
             android:name=".CadastroAmigoActivity"

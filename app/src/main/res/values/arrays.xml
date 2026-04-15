@@ -1,17 +1,3 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-    <string-array name="amigos">
-        <item>Luke Skywalker</item>
-        <item>Leia Organa</item>
-        <item>Chewbacca</item>
-        <item>Obi-Wan Kenobi</item>
-        <item>Darth Vader</item>
-        <item>Mestre Yoda</item>
-        <item>R2-D2</item>
-        <item>C-3PO</item>
-        <item>Boba Fett</item>
-        <item>Din Djarin (Mando)</item>
-    </string-array>
-
 </resources>
