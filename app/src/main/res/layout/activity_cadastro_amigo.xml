@@ -14,7 +14,91 @@
         android:layout_height="wrap_content"
         android:paddingBottom="32dp">
 
-        <!-- Campos de cadastro serão incluídos aqui futuramente -->
+        <TextView
+            android:id="@+id/textViewNomeAmigo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:labelFor="@id/edtNomeAmigo"
+            android:text="@string/nome_amigo"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/edtNomeAmigo"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:ems="10"
+            android:hint="@string/hint_nome_amigo"
+            android:inputType="text|textCapSentences"
+            android:maxLength="20"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textViewNomeAmigo" />
+
+        <TextView
+            android:id="@+id/textViewObservacaoAmigo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:labelFor="@id/edtObservacao"
+            android:text="@string/observacoes"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/edtNomeAmigo" />
+
+        <EditText
+            android:id="@+id/edtObservacao"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:ems="10"
+            android:gravity="top"
+            android:hint="@string/hint_observacao_amigo"
+            android:inputType="textMultiLine|textCapSentences"
+            android:maxLength="200"
+            android:minHeight="48dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textViewObservacaoAmigo" />
+
+        <CheckBox
+            android:id="@+id/chkAtivo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:checked="true"
+            android:text="@string/ativo"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/edtObservacao" />
+
+        <TextView
+            android:id="@+id/txvIncluidoTexto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="24dp"
+            android:text="@string/incluido_em"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/chkAtivo" />
+
+        <TextView
+            android:id="@+id/txvIncluidoData"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            app:layout_constraintBottom_toBottomOf="@+id/txvIncluidoTexto"
+            app:layout_constraintStart_toEndOf="@+id/txvIncluidoTexto"
+            app:layout_constraintTop_toTopOf="@+id/txvIncluidoTexto"
+            tools:text="01/01/2024" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>

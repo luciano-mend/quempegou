@@ -59,4 +59,17 @@
     <string name="incluir_amigos">Add Friends</string>
     <string name="amigos">Friends</string>
     <string name="cadastro_amigo">Friend registration</string>
+    <string name="nome_amigo">Name</string>
+    <string name="hint_nome_amigo">Friend\'s name</string>
+    <string name="hint_observacao_amigo">Additional info about the friend</string>
+    <string name="incluido_em">Included on:</string>
+    <string name="ativo">Active?</string>
+    <string name="editar_amigo">Edit Friend</string>
+    <string name="novo_amigo">New Friend</string>
+    <string name="campo_nome_amigo_nao_preenchido">Friend\'s name field is not filled!</string>
+    <string name="layout_ativo">Active?</string>
+    <string name="sim_ativo">Yes, active</string>
+    <string name="nao_ativo">Inactive</string>
+    <string name="confirmacao_exclusao_amigo">Do you want to delete?\n\"%1$s\"</string>
+    <string name="amigo_possui_emprestimos">This friend cannot be deleted as they have linked loans!</string>
 </resources>

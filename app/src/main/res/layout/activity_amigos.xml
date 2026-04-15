@@ -7,6 +7,14 @@
     android:layout_height="match_parent"
     tools:context=".AmigosActivity">
 
-    <!-- Lista de amigos será incluída aqui futuramente -->
+    <ListView
+        android:id="@+id/lsvAmigos"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:listitem="@layout/linha_lista_amigos" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

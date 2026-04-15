@@ -58,4 +58,17 @@
     <string name="incluir_amigos">Incluir amigos</string>
     <string name="amigos">Amigos</string>
     <string name="cadastro_amigo">Cadastro de amigos</string>
+    <string name="nome_amigo">Nome</string>
+    <string name="hint_nome_amigo">Nome do amigo</string>
+    <string name="hint_observacao_amigo">Informações adicionais</string>
+    <string name="incluido_em">Incluído em:</string>
+    <string name="ativo">Ativo</string>
+    <string name="editar_amigo">Editar Amigo</string>
+    <string name="novo_amigo">Novo Amigo</string>
+    <string name="campo_nome_amigo_nao_preenchido">Campo nome não preenchido!</string>
+    <string name="layout_ativo">Ativo?</string>
+    <string name="sim_ativo">Sim, ativo</string>
+    <string name="nao_ativo">Inativo</string>
+    <string name="confirmacao_exclusao_amigo">Você deseja excluir?\n\"%1$s\"</string>
+    <string name="amigo_possui_emprestimos">Este amigo não pode ser excluído porque existem empréstimos vinculados</string>
 </resources>
