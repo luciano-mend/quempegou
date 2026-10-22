@@ -87,16 +87,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textViewCurso" />
 
-            <ImageView
-                android:id="@+id/imgUtfpr"
-                android:layout_width="94dp"
-                android:layout_height="81dp"
-                android:layout_marginTop="8dp"
-                android:background="#FFFFFF"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textViewDescricao"
-                app:srcCompat="@drawable/utfpr_logo" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 

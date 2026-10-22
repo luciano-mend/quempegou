@@ -35,7 +35,7 @@
     <string name="novo_emprestimo">New Loan</string>
     <string name="utfpr">UTFPR</string>
     <string name="curso">Course: Specialization in Java Technology</string>
-    <string name="email_aluno" translatable="false">E-mail: lucianomendonca@alunos.utfpr.edu.br</string>
+    <string name="email_aluno" translatable="false">E-mail: luciano.s.mend@gmail.com</string>
     <string name="editar">Edit</string>
     <string name="excluir">Delete</string>
     <string name="editar_emprestimo">Edit Loan</string>
