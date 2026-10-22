@@ -1,28 +1,35 @@
 package br.luciano.quempegou;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.format.DateFormat;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.AdapterView;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.datepicker.MaterialDatePicker;
 
 import java.util.Date;
+import java.util.List;
 
-import br.luciano.quempegou.models.PrioridadeDevolucao;
+import br.luciano.quempegou.models.Amigo;
 import br.luciano.quempegou.models.Emprestimo;
+import br.luciano.quempegou.models.PrioridadeDevolucao;
 import br.luciano.quempegou.persistencia.EmprestimosDatabase;
 import br.luciano.quempegou.utils.UtilsAlert;
 
@@ -40,12 +47,15 @@ public class CadastroEmprestimoActivity extends AppCompatActivity {
     private CheckBox chkFragil, chkDevolucao;
     private RadioGroup rgbPrioridadeDevolucao;
     private RadioButton rdbBaixa, rdbAlta;
+    private Button btnIncluirAmigos, btnAmigos;
 
 
     private int modo;
     private Emprestimo emprestimoOriginal;
     private long dataEmprestimoEmMillis;
     private Long dataDevolucaoEmMillis;
+
+    private List<Amigo> listaAmigosAtivos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +72,8 @@ public class CadastroEmprestimoActivity extends AppCompatActivity {
         rdbAlta = findViewById(R.id.rdbAlta);
         edtDataEmprestimo = findViewById(R.id.edtDataEmprestimo);
         edtDataDevolucao = findViewById(R.id.edtDataDevolucao);
+        btnIncluirAmigos = findViewById(R.id.btnIncluirAmigos);
+        btnAmigos = findViewById(R.id.btnAmigos);
 
         edtDataEmprestimo.setOnClickListener(v -> mostrarDatePicker(true));
         edtDataDevolucao.setOnClickListener(v -> {
@@ -83,10 +95,18 @@ public class CadastroEmprestimoActivity extends AppCompatActivity {
             }
         });
 
-        populaSpinner();
+        btnIncluirAmigos.setOnClickListener(v -> {
+            Intent intent = new Intent(this, CadastroAmigoActivity.class);
+            intent.putExtra(CadastroAmigoActivity.KEY_MODO, CadastroAmigoActivity.MODO_NOVO);
+            startActivity(intent);
+        });
+
+        btnAmigos.setOnClickListener(v -> {
+            Intent intent = new Intent(this, AmigosActivity.class);
+            startActivity(intent);
+        });
 
         Intent intent = getIntent();
-
         Bundle bundle = intent.getExtras();
 
         if (bundle != null) {
@@ -108,7 +128,6 @@ public class CadastroEmprestimoActivity extends AppCompatActivity {
                 emprestimoOriginal = database.getEmprestimoDao().getById(idEmprestimo);
 
                 edtItemEmprestado.setText(emprestimoOriginal.getNomeItemEmprestado());
-                spnAmigos.setSelection(emprestimoOriginal.getAmigo());
 
                 switch (emprestimoOriginal.getPrioridadeDevolucao()) {
                     case BAIXA:
@@ -148,6 +167,81 @@ public class CadastroEmprestimoActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Long idAmigoSelecionado = null;
+        if (modo == MODO_EDITAR && emprestimoOriginal != null) {
+            idAmigoSelecionado = emprestimoOriginal.getAmigo();
+        } else if (spnAmigos.getSelectedItem() != null) {
+            idAmigoSelecionado = ((Amigo) spnAmigos.getSelectedItem()).getId();
+        }
+        
+        carregarSpinnerAmigos(idAmigoSelecionado);
+    }
+
+    private void carregarSpinnerAmigos(Long idAmigoSelecionado) {
+        EmprestimosDatabase database = EmprestimosDatabase.getInstance(this);
+        listaAmigosAtivos = database.getAmigoDao().getAllAtivos();
+        
+        if (idAmigoSelecionado != null) {
+            boolean encontrado = false;
+            for (Amigo a : listaAmigosAtivos) {
+                if (a.getId().equals(idAmigoSelecionado)) {
+                    encontrado = true;
+                    break;
+                }
+            }
+            if (!encontrado) {
+                Amigo amigoInativo = database.getAmigoDao().getById(idAmigoSelecionado);
+                if (amigoInativo != null) {
+                    listaAmigosAtivos.add(0, amigoInativo);
+                }
+            }
+        }
+
+        ArrayAdapter<Amigo> adapter = new ArrayAdapter<Amigo>(this, android.R.layout.simple_spinner_item, listaAmigosAtivos) {
+            @NonNull
+            @Override
+            public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+                TextView tv = (TextView) super.getView(position, convertView, parent);
+                Amigo amigo = getItem(position);
+                tv.setText(amigo.getNome());
+                if (!amigo.isAtivo()) {
+                    tv.setTextColor(Color.RED);
+                } else {
+                    tv.setTextColor(Color.BLACK);
+                }
+                return tv;
+            }
+
+            @Override
+            public View getDropDownView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+                TextView tv = (TextView) super.getDropDownView(position, convertView, parent);
+                Amigo amigo = getItem(position);
+                tv.setText(amigo.getNome());
+                if (!amigo.isAtivo()) {
+                    tv.setTextColor(Color.RED);
+                } else {
+                    tv.setTextColor(Color.BLACK);
+                }
+                return tv;
+            }
+        };
+        
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spnAmigos.setAdapter(adapter);
+
+        if (idAmigoSelecionado != null) {
+            for (int i = 0; i < listaAmigosAtivos.size(); i++) {
+                if (listaAmigosAtivos.get(i).getId().equals(idAmigoSelecionado)) {
+                    spnAmigos.setSelection(i);
+                    break;
+                }
+            }
+        }
+    }
+
     private void mostrarDatePicker(boolean ehEmprestimo) {
         int tituloId = ehEmprestimo ? R.string.data_emprestimo : R.string.data_devolucao;
         MaterialDatePicker<Long> seletorData = MaterialDatePicker.Builder.datePicker()
@@ -175,17 +269,6 @@ public class CadastroEmprestimoActivity extends AppCompatActivity {
             java.text.DateFormat formatador = DateFormat.getDateFormat(this);
             editText.setText(formatador.format(new Date(millis)));
         }
-    }
-
-    private void populaSpinner() {
-
-        String[] amigosLista = getResources().getStringArray(R.array.amigos);
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_list_item_1,
-                amigosLista);
-
-        spnAmigos.setAdapter(adapter);
     }
 
     public void limparCampos() {
@@ -221,9 +304,9 @@ public class CadastroEmprestimoActivity extends AppCompatActivity {
             return;
         }
 
-        int emprestadoPara = spnAmigos.getSelectedItemPosition();
+        Amigo amigoSelecionado = (Amigo) spnAmigos.getSelectedItem();
 
-        if (emprestadoPara == AdapterView.INVALID_POSITION) {
+        if (amigoSelecionado == null) {
             UtilsAlert.mostrarAviso(this,
                     R.string.nao_existem_amigos_cadastrados);
 
@@ -249,7 +332,7 @@ public class CadastroEmprestimoActivity extends AppCompatActivity {
 
         String observacoes = edtObservacoes.getText().toString().trim();
 
-        Emprestimo emprestimo = new Emprestimo(itemEmprestado, emprestadoPara,
+        Emprestimo emprestimo = new Emprestimo(itemEmprestado, amigoSelecionado.getId(),
                                                prioridadeDevolucao, ehFragil,
                                                itemDevolvido, observacoes,
                                                dataEmprestimoEmMillis, dataDevolucaoEmMillis);

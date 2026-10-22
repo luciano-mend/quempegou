@@ -15,17 +15,33 @@ import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 
+import android.content.Context;
 import android.content.Intent;
 
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import br.luciano.quempegou.models.Amigo;
+import br.luciano.quempegou.persistencia.EmprestimosDatabase;
+
 @RunWith(AndroidJUnit4.class)
 public class CadastroEmprestimoActivityTest {
+
+    @Before
+    public void setup() {
+        Context context = ApplicationProvider.getApplicationContext();
+        EmprestimosDatabase db = EmprestimosDatabase.getInstance(context);
+        
+        // Limpa e prepara amigos para os testes de UI
+        db.clearAllTables();
+        db.getAmigoDao().insert(new Amigo("Amigo Teste 1", "", System.currentTimeMillis(), true));
+        db.getAmigoDao().insert(new Amigo("Amigo Teste 2", "", System.currentTimeMillis(), true));
+    }
 
     @Test
     public void deveMostrarErroAoTentarSalvarSemNomeDoItem() {
@@ -60,7 +76,8 @@ public class CadastroEmprestimoActivityTest {
         try (ActivityScenario<CadastroEmprestimoActivity> scenario = ActivityScenario.launch(intent)) {
             onView(withId(R.id.spnAmigos)).perform(scrollTo(), click());
 
-            onData(allOf(is(instanceOf(String.class)))).atPosition(1).perform(click());
+            // Agora o Spinner contém objetos Amigo, não Strings
+            onData(allOf(is(instanceOf(Amigo.class)))).atPosition(1).perform(click());
 
             onView(withId(R.id.spnAmigos)).check(matches(isDisplayed()));
         }

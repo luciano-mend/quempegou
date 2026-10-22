@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import br.luciano.quempegou.R;
 import br.luciano.quempegou.models.Emprestimo;
@@ -18,7 +19,7 @@ public class EmprestimoAdapter extends BaseAdapter {
 
     private Context context;
     private List<Emprestimo> listaEmprestimo;
-    private String[] amigos;
+    private Map<Long, String> nomesAmigos;
 
     private static class EmprestimoHolder {
         public TextView txvValorItemEmprestado;
@@ -30,11 +31,10 @@ public class EmprestimoAdapter extends BaseAdapter {
         public TextView txvValorObservacoes;
     }
 
-    public EmprestimoAdapter(Context context, List<Emprestimo> listaEmprestimo) {
+    public EmprestimoAdapter(Context context, List<Emprestimo> listaEmprestimo, Map<Long, String> nomesAmigos) {
         this.context = context;
         this.listaEmprestimo = listaEmprestimo;
-
-        amigos = context.getResources().getStringArray(R.array.amigos);
+        this.nomesAmigos = nomesAmigos;
     }
 
     @Override
@@ -55,10 +55,8 @@ public class EmprestimoAdapter extends BaseAdapter {
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
 
-        // padrão (pattern) holder
         EmprestimoHolder holder;
 
-        // se a view é null ela não foi criada ainda, é a primeira execução
         if (view == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = inflater.inflate(R.layout.linha_lista_emprestimos, viewGroup, false);
@@ -81,7 +79,8 @@ public class EmprestimoAdapter extends BaseAdapter {
 
         holder.txvValorItemEmprestado.setText(emprestimo.getNomeItemEmprestado());
 
-        holder.txvValorNomeAmigo.setText(amigos[emprestimo.getAmigo()]);
+        String nomeAmigo = nomesAmigos.get(emprestimo.getAmigo());
+        holder.txvValorNomeAmigo.setText(nomeAmigo != null ? nomeAmigo : "ID: " + emprestimo.getAmigo());
 
         switch (emprestimo.getPrioridadeDevolucao()){
             case VAZIO:

@@ -36,7 +36,7 @@ public class Emprestimo {
     @NonNull
     @ColumnInfo(index = true)
     private String nomeItemEmprestado;
-    private int amigo;
+    private long amigo; // Agora armazena o ID do Amigo
     private PrioridadeDevolucao prioridadeDevolucao;
     private boolean fragil;
     private boolean devolvido;
@@ -44,7 +44,7 @@ public class Emprestimo {
     private long dataEmprestimo;
     private Long dataDevolucao;
 
-    public Emprestimo(String nomeItemEmprestado, int amigo, PrioridadeDevolucao prioridadeDevolucao, boolean fragil, boolean devolvido, String observacao, long dataEmprestimo, Long dataDevolucao) {
+    public Emprestimo(String nomeItemEmprestado, long amigo, PrioridadeDevolucao prioridadeDevolucao, boolean fragil, boolean devolvido, String observacao, long dataEmprestimo, Long dataDevolucao) {
         this.nomeItemEmprestado = nomeItemEmprestado;
         this.amigo = amigo;
         this.prioridadeDevolucao = prioridadeDevolucao;
@@ -71,11 +71,11 @@ public class Emprestimo {
         this.nomeItemEmprestado = nomeItemEmprestado;
     }
 
-    public int getAmigo() {
+    public long getAmigo() {
         return amigo;
     }
 
-    public void setAmigo(int amigo) {
+    public void setAmigo(long amigo) {
         this.amigo = amigo;
     }
 
